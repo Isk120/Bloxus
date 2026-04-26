@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚔️ BloxusQuest — ULB Session Juin 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cinzel+Decorative:wght@400;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-darkest:#050510;
+  --bg-dark:#0a0a1c;
+  --bg-card:#0f0f22;
+  --bg-card2:#141430;
+  --gold:#ffd700;
+  --gold-dim:#9a7000;
+  --border-gold:#5a4500;
+  --border-bright:#c8900a;
+  --ember:#ff6b35;
+  --arcane:#9b59b6;
+  --arcane-bright:#c39bd3;
+  --steel:#4a9eff;
+  --emerald:#00c896;
+  --text-prim:#e8dfc0;
+  --text-sec:#9a8860;
+  --text-dim:#4a4030;
+  --shadow-gold:rgba(255,215,0,0.25);
+  --shadow-arcane:rgba(155,89,182,0.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg-darkest);
+  color:var(--text-prim);
+  font-family:'Crimson Text',serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+#starfield{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.5}
+
+/* ─────────────── APP WRAP ─────────────── */
+.app{position:relative;z-index:1;max-width:1480px;margin:0 auto;padding:14px;display:flex;flex-direction:column;gap:14px}
+
+/* ─────────────── TOP HEADER ─────────────── */
+.header{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
+  padding:14px 24px;
+  background:linear-gradient(180deg,#0c0c24 0%,#090918 100%);
+  border:1px solid var(--border-bright);
+  border-radius:3px;
+  position:relative;overflow:hidden;
+}
+.header::before,.header::after{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.header::before{top:0}.header::after{bottom:0}
+
+.char-wrap{display:flex;align-items:center;gap:12px}
+.char-avatar{
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,#130920,#221040);
+  border:2px solid var(--border-bright);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  box-shadow:0 0 18px var(--shadow-arcane);flex-shrink:0;
+  transition:transform .3s;
+}
+.char-avatar:hover{transform:scale(1.08)}
+.char-info{min-width:0}
+.char-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);font-weight:600;letter-spacing:.5px}
+.char-level{font-size:11px;color:var(--text-sec);margin-bottom:5px}
+.xp-bar-wrap{
+  width:190px;height:9px;
+  background:#14142a;border:1px solid var(--border-gold);border-radius:4px;overflow:hidden;position:relative;
+}
+.xp-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,#7d2b9e,#d4a017,#ffd700);
+  border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1);position:relative;
+}
+.xp-bar-fill::after{
+  content:'';position:absolute;top:0;right:0;bottom:0;width:30px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5));
+  animation:shimmer 1.8s infinite;
+}
+@keyframes shimmer{0%,100%{opacity:0}50%{opacity:1}}
+.xp-text{font-size:10px;color:var(--text-sec);margin-top:3px}
+
+.logo-block{text-align:center}
+.logo-title{font-family:'Cinzel Decorative',cursive;font-size:24px;color:var(--gold);text-shadow:0 0 30px var(--shadow-gold);letter-spacing:3px}
+.logo-sub{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:2px;margin-top:3px}
+.rune-sep{font-size:14px;color:var(--border-bright);letter-spacing:6px;margin:5px 0}
+.global-stat{font-family:'Cinzel',serif;font-size:11px;color:var(--text-sec)}
+
+.streak-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.streak-pill{
+  display:flex;align-items:center;gap:8px;
+  background:#1a0800;border:1px solid var(--ember);border-radius:20px;padding:7px 16px;
+  box-shadow:0 0 14px rgba(255,107,53,.2);
+}
+.streak-fire{font-size:20px;animation:flicker .45s infinite alternate}
+@keyframes flicker{0%{transform:scale(1) rotate(-4deg);filter:brightness(1)}100%{transform:scale(1.12) rotate(4deg);filter:brightness(1.4)}}
+.streak-num{font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:var(--ember)}
+.streak-lbl{font-size:9px;color:rgba(255,107,53,.6);letter-spacing:1px;text-transform:uppercase}
+.last-study{font-size:10px;color:var(--text-dim)}
+
+/* ─────────────── MAIN LAYOUT ─────────────── */
+.main{display:grid;grid-template-columns:290px 1fr 300px;gap:14px;align-items:start}
+
+/* ─────────────── CARDS ─────────────── */
+.card{
+  background:var(--bg-card);
+  border:1px solid var(--border-gold);
+  border-radius:3px;overflow:hidden;position:relative;
+}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-bright),transparent)}
+.card-head{
+  display:flex;align-items:center;gap:8px;padding:11px 15px;
+  background:linear-gradient(180deg,#16163a 0%,var(--bg-card) 100%);
+  border-bottom:1px solid var(--border-gold);
+}
+.card-title{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+.card-body{padding:14px}
+
+/* ─────────────── BOSS COUNTDOWNS ─────────────── */
+.boss-list{display:flex;flex-direction:column;gap:10px}
+.boss-card{
+  background:var(--bg-dark);border-radius:3px;padding:12px 13px;
+  border-left:3px solid;position:relative;overflow:hidden;
+  transition:background .2s;cursor:default;
+}
+.boss-card:hover{background:#131326}
+.boss-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.boss-name{font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.5px}
+.boss-sub{font-size:10px;color:var(--text-dim);margin-top:2px}
+.threat-badge{font-size:9px;padding:2px 8px;border-radius:9px;background:rgba(0,0,0,.5);border:1px solid;font-family:'Cinzel',serif;white-space:nowrap}
+.boss-cd{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px}
+.cd-unit{text-align:center}
+.cd-val{font-family:'Cinzel',serif;font-size:20px;font-weight:900;line-height:1;display:block}
+.cd-lbl{font-size:7px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px}
+.boss-prog{margin-top:8px;height:4px;background:#1a1a30;border-radius:2px;overflow:hidden}
+.boss-prog-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.boss-pct{font-size:8px;color:var(--text-dim);margin-top:3px;text-align:right;font-family:'Cinzel',serif}
+
+/* ─────────────── POMODORO ─────────────── */
+.pomo-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.pomo-mode-pills{display:flex;gap:8px}
+.mode-pill{
+  font-family:'Cinzel',serif;font-size:10px;padding:5px 14px;border-radius:12px;
+  cursor:pointer;border:1px solid var(--border-gold);color:var(--text-dim);background:transparent;transition:all .2s;
+}
+.mode-pill.active{background:var(--bg-card2);color:var(--gold);border-color:var(--gold);box-shadow:0 0 10px var(--shadow-gold)}
+.pomo-ring{position:relative;width:210px;height:210px;flex-shrink:0}
+.pomo-ring svg{transform:rotate(-90deg);width:210px;height:210px}
+.ring-bg{fill:none;stroke:#14142a;stroke-width:9}
+.ring-prog{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .4s}
+.pomo-inner{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none;
+}
+.pomo-time{font-family:'Cinzel',serif;font-size:38px;font-weight:900;letter-spacing:2px;line-height:1}
+.pomo-lbl{font-size:10px;color:var(--text-sec);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.pomo-sess{font-size:10px;color:var(--text-dim);margin-top:2px}
+.pomo-btns{display:flex;gap:10px}
+.btn{
+  font-family:'Cinzel',serif;font-size:11px;padding:9px 20px;border-radius:3px;cursor:pointer;
+  border:1px solid;transition:all .2s;letter-spacing:.5px;font-weight:600;
+}
+.btn-gold{background:linear-gradient(180deg,#2d1c00,#1a0f00);border-color:var(--gold);color:var(--gold)}
+.btn-gold:hover{background:linear-gradient(180deg,#3d2800,#281600);box-shadow:0 0 14px var(--shadow-gold)}
+.btn-ghost{background:linear-gradient(180deg,#16163a,var(--bg-card));border-color:var(--border-gold);color:var(--text-sec)}
+.btn-ghost:hover{border-color:var(--border-bright);color:var(--text-prim)}
+.pomo-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.pomo-stat{
+  text-align:center;background:var(--bg-dark);border:1px solid var(--border-gold);border-radius:3px;padding:9px 4px;
+}
+.pomo-stat-val{font-family:'Cinzel',serif;font-size:20px;font-weight:900;color:var(--gold);display:block}
+.pomo-stat-lbl{font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* ─────────────── QUEST LOG ─────────────── */
+.quest-list{display:flex;flex-direction:column;gap:10px}
+.quest-item{background:var(--bg-dark);border-radius:3px;overflow:hidden;border:1px solid var(--border-gold)}
+.quest-header{
+  display:flex;align-items:center;gap:10px;padding:11px 13px;
+  cursor:pointer;transition:background .2s;user-select:none;
+}
+.quest-header:hover{background:var(--bg-card2)}
+.q-icon{font-size:22px;flex-shrink:0}
+.q-info{flex:1;min-width:0}
+.q-name{font-family:'Cinzel',serif;font-size:12px;font-weight:600}
+.q-sub{font-size:10px;color:var(--text-dim);margin-top:2px}
+.q-xp{font-family:'Cinzel',serif;font-size:10px;padding:3px 8px;border-radius:9px;background:#1a1500;border:1px solid var(--gold-dim);color:var(--gold);flex-shrink:0;white-space:nowrap}
+.q-bar-wrap{padding:0 13px 6px}
+.q-bar{height:3px;background:#14142a;border-radius:2px;overflow:hidden}
+.q-bar-fill{height:100%;border-radius:2px;transition:width .5s ease}
+.q-bar-lbl{font-size:8px;color:var(--text-dim);text-align:right;margin-top:2px}
+.chapter-list{
+  padding:8px 13px 13px;display:none;
+  border-top:1px solid #1a1a30;flex-direction:column;gap:3px;max-height:280px;overflow-y:auto;
+}
+.chapter-list.open{display:flex}
+.chapter-list::-webkit-scrollbar{width:3px}
+.chapter-list::-webkit-scrollbar-track{background:var(--bg-dark)}
+.chapter-list::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:2px}
+.ch-item{
+  display:flex;align-items:flex-start;gap:8px;padding:5px 6px;border-radius:3px;cursor:pointer;transition:background .15s;
+}
+.ch-item:hover{background:var(--bg-card2)}
+.ch-check{
+  width:15px;height:15px;border-radius:2px;border:1px solid var(--border-gold);background:var(--bg-dark);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;
+  transition:all .25s;margin-top:1px;
+}
+.ch-item.done .ch-check{background:var(--arcane);border-color:var(--arcane-bright);color:#fff}
+.ch-item.done .ch-text{text-decoration:line-through;color:var(--text-dim);opacity:.55}
+.ch-text{font-size:12px;color:var(--text-prim);line-height:1.4;flex:1}
+.ch-xp{font-size:9px;color:var(--text-dim);flex-shrink:0;margin-top:2px}
+
+/* ─────────────── ACHIEVEMENTS ─────────────── */
+.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.ach{
+  background:var(--bg-dark);border:1px solid var(--border-gold);border-radius:3px;
+  padding:10px 5px;text-align:center;position:relative;transition:all .3s;cursor:default;
+}
+.ach.unlocked{border-color:var(--gold);background:#1a1400;box-shadow:0 0 12px rgba(255,215,0,.15)}
+.ach.locked{opacity:.35;filter:grayscale(.9)}
+.ach-icon{font-size:24px;display:block;margin-bottom:4px}
+.ach-name{font-family:'Cinzel',serif;font-size:8px;color:var(--text-sec);line-height:1.3}
+.ach.unlocked .ach-name{color:var(--gold)}
+.ach-tip{
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:#0a0a20;border:1px solid var(--border-bright);padding:6px 10px;border-radius:3px;
+  font-size:10px;color:var(--text-prim);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;z-index:200;
+}
+.ach:hover .ach-tip{opacity:1}
+
+/* ─────────────── NOTIFICATIONS ─────────────── */
+.notif{
+  position:fixed;top:80px;right:20px;
+  background:linear-gradient(135deg,#1a1a00,#2a2000);
+  border:1px solid var(--gold);border-radius:3px;padding:13px 18px;
+  max-width:270px;z-index:1001;
+  animation:slideIn .3s ease,fadeOut .5s ease 2.7s forwards;
+  box-shadow:0 0 24px var(--shadow-gold);
+}
+@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeOut{to{opacity:0;transform:translateX(120%)}}
+.notif-title{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);font-weight:600;margin-bottom:3px}
+.notif-body{font-size:12px;color:var(--text-sec)}
+
+/* ─────────────── XP POPUP ─────────────── */
+.xp-popup{
+  position:fixed;pointer-events:none;font-family:'Cinzel',serif;font-size:16px;font-weight:900;
+  color:var(--gold);text-shadow:0 0 12px var(--shadow-gold);z-index:999;
+  animation:xpFloat 1.6s ease forwards;white-space:nowrap;
+}
+@keyframes xpFloat{0%{transform:translateY(0) scale(1);opacity:1}60%{transform:translateY(-50px) scale(1.15);opacity:1}100%{transform:translateY(-80px) scale(.9);opacity:0}}
+
+/* ─────────────── BREAK OVERLAY ─────────────── */
+.break-ov{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,15,5,.92);z-index:1000;
+  align-items:center;justify-content:center;flex-direction:column;gap:16px;
+}
+.break-ov.active{display:flex}
+.break-em{font-size:64px;animation:breathe 3s infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.break-big{font-family:'Cinzel',serif;font-size:72px;color:var(--emerald);text-shadow:0 0 40px rgba(0,200,150,.6)}
+.break-sub{font-family:'Cinzel',serif;font-size:20px;color:var(--text-prim);letter-spacing:4px}
+.break-hint{font-size:14px;color:var(--text-sec);letter-spacing:1px}
+
+/* ─────────────── LEVEL UP OVERLAY ─────────────── */
+.lvlup-ov{
+  display:none;position:fixed;inset:0;background:rgba(60,20,0,.85);z-index:1002;
+  align-items:center;justify-content:center;flex-direction:column;gap:14px;
+}
+.lvlup-ov.active{display:flex;animation:flashIn .4s ease}
+@keyframes flashIn{0%{opacity:0}50%{opacity:1}100%{opacity:1}}
+.lvlup-big{font-family:'Cinzel Decorative',cursive;font-size:36px;color:var(--gold);text-shadow:0 0 40px var(--shadow-gold);text-align:center;letter-spacing:3px}
+.lvlup-em{font-size:80px;animation:spin 1s ease forwards}
+@keyframes spin{0%{transform:rotate(0) scale(0);opacity:0}50%{transform:rotate(360deg) scale(1.2);opacity:1}100%{transform:rotate(360deg) scale(1);opacity:1}}
+
+/* ─────────────── RESPONSIVE ─────────────── */
+@media(max-width:1100px){.main{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.main{grid-template-columns:1fr}.header{grid-template-columns:1fr;gap:10px}}
+
+/* ─────────────── PARTICLES ─────────────── */
+.particle{
+  position:fixed;pointer-events:none;border-radius:50%;z-index:999;
+  animation:particle-float 1.2s ease forwards;
+}
+@keyframes particle-float{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<!-- ── BREAK OVERLAY ── -->
+<div class="break-ov" id="breakOv">
+  <div class="break-em">🌿</div>
+  <div class="break-sub">Pause Sacrée</div>
+  <div class="break-big" id="breakTime">10:00</div>
+  <div class="break-hint">Lève-toi · Bois de l'eau · Repose tes yeux</div>
+  <button class="btn btn-ghost" onclick="skipBreak()" style="margin-top:8px">Ignorer la pause →</button>
+</div>
+
+<!-- ── LEVEL UP OVERLAY ── -->
+<div class="lvlup-ov" id="lvlupOv" onclick="document.getElementById('lvlupOv').classList.remove('active')">
+  <div class="lvlup-em" id="lvlupEm">👑</div>
+  <div class="lvlup-big" id="lvlupText">LEVEL UP !</div>
+  <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--text-sec);letter-spacing:2px">Touche l'écran pour continuer</div>
+</div>
+
+<div class="app">
+
+  <!-- ══ HEADER ══ -->
+  <div class="header">
+    <div class="char-wrap">
+      <div class="char-avatar" id="charAv">🧑‍🎓</div>
+      <div class="char-info">
+        <div class="char-name">Étudiant de l'ULB</div>
+        <div class="char-level" id="lvlTxt">Niveau 1 — Apprenti</div>
+        <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xpFill" style="width:0%"></div></div>
+        <div class="xp-text" id="xpTxt">0 / 200 XP</div>
+      </div>
+    </div>
+
+    <div class="logo-block">
+      <div class="logo-title">⚔️ BloxusQuest ⚔️</div>
+      <div class="logo-sub">ULB · Session de Juin 2026</div>
+      <div class="rune-sep">◈ ✦ ◈</div>
+      <div class="global-stat" id="globalStat">0 chapitres maîtrisés</div>
+    </div>
+
+    <div class="streak-wrap">
+      <div class="streak-pill">
+        <span class="streak-fire">🔥</span>
+        <span class="streak-num" id="streakNum">0</span>
+        <span class="streak-lbl">JOURS</span>
+      </div>
+      <div class="last-study" id="lastStudy">Aucune session encore</div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN GRID ══ -->
+  <div class="main">
+
+    <!-- ── LEFT: BOSS COUNTDOWNS ── -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="card">
+        <div class="card-head"><span>💀</span><span class="card-title">Boss à Vaincre</span></div>
+        <div class="card-body"><div class="boss-list" id="bossList"></div></div>
+      </div>
+    </div>
+
+    <!-- ── CENTER: POMODORO + QUESTS ── -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <!-- POMODORO -->
+      <div class="card">
+        <div class="card-head"><span>⏳</span><span class="card-title">Minuteur de Combat</span></div>
+        <div class="card-body">
+          <div class="pomo-wrap">
+            <div class="pomo-mode-pills">
+              <button class="mode-pill active" id="pillWork" onclick="setMode('work')">⚔️ Focus 50m</button>
+              <button class="mode-pill" id="pillBreak" onclick="setMode('break')">🌿 Repos 10m</button>
+            </div>
+            <div class="pomo-ring">
+              <svg viewBox="0 0 210 210">
+                <circle class="ring-bg" cx="105" cy="105" r="92"/>
+                <circle class="ring-prog" id="ringProg" cx="105" cy="105" r="92"
+                  stroke-dasharray="578.05"
+                  stroke-dashoffset="0"
+                  stroke="#ffd700"/>
+              </svg>
+              <div class="pomo-inner">
+                <div class="pomo-time" id="pomoTime">50:00</div>
+                <div class="pomo-lbl" id="pomoLbl">CONCENTRATION</div>
+                <div class="pomo-sess" id="pomoSess">Session #1</div>
+              </div>
+            </div>
+            <div class="pomo-btns">
+              <button class="btn btn-gold" id="startBtn" onclick="toggleTimer()">▶ LANCER</button>
+              <button class="btn btn-ghost" onclick="resetTimer()">↺ RESET</button>
+            </div>
+            <div class="pomo-stats">
+              <div class="pomo-stat"><span class="pomo-stat-val" id="todaySess">0</span><span class="pomo-stat-lbl">Sessions</span></div>
+              <div class="pomo-stat"><span class="pomo-stat-val" id="todayMins">0</span><span class="pomo-stat-lbl">Minutes</span></div>
+              <div class="pomo-stat"><span class="pomo-stat-val" id="totalSess">0</span><span class="pomo-stat-lbl">Total</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTS -->
+      <div class="card">
+        <div class="card-head"><span>📜</span><span class="card-title">Journal de Quêtes</span></div>
+        <div class="card-body" style="padding:8px"><div class="quest-list" id="questList"></div></div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: ACHIEVEMENTS ── -->
+    <div>
+      <div class="card">
+        <div class="card-head"><span>🏆</span><span class="card-title">Succès</span></div>
+        <div class="card-body"><div class="ach-grid" id="achGrid"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+
+const EXAMS = [
+  {id:'PHYSF103', boss:'Archimage Physix', dungeon:'Donjon de la Physique',
+   date:new Date('2026-05-26T09:00:00'), color:'#ff6b35', icon:'⚡', xp:50},
+  {id:'INFOF103', boss:'Golem Algorithmix', dungeon:'Forêt des Algorithmes',
+   date:new Date('2026-05-29T09:00:00'), color:'#00c896', icon:'🌲', xp:60},
+  {id:'INFOF105', boss:'Dragon Compilator', dungeon:'Citadelle du C++',
+   date:new Date('2026-06-03T09:00:00'), color:'#4a9eff', icon:'⚙️', xp:55},
+  {id:'MATHF114', boss:'Lich Mathématix', dungeon:"Château de l'Algèbre",
+   date:new Date('2026-06-12T09:00:00'), color:'#ffd700', icon:'🏰', xp:65},
+];
+
+const CHAPTERS = {
+  PHYSF103:[
+    'Cinématique du point matériel',
+    'Dynamique du point matériel',
+    'Travail et énergie',
+    'La charge électrique et la loi de Coulomb',
+    'Le champ électrique',
+    'Le potentiel électrique',
+    'Courant électrique, résistance et piles',
+    'Circuits avec résistances ohmiques',
+    'Semi-conducteurs et portes logiques',
+    'Appareils de mesures électriques',
+    'Les condensateurs',
+    'Le magnétisme',
+    'Induction électromagnétique et inducteurs',
+    'CA : déphasage, Fresnel, phaseurs, réactance',
+    'CA : impédance, puissance, facteur de qualité',
+  ],
+  INFOF103:[
+    'Les ADTs (Abstract Data Types)',
+    'Récursivité',
+    'Backtracking',
+    'Arbres',
+    'Séquences triées',
+    'Files à priorité (Heaps)',
+    'Ensembles dynamiques et dictionnaires',
+    'Graphes',
+    'Dérécursification',
+    'Tris',
+    'Programmation dynamique',
+  ],
+  INFOF105:[
+    'Compilation et exécution en C++',
+    'Expressions et instructions',
+    'Conditions et boucles',
+    "Fonctions simples et découpe d'un programme",
+    'Modes de stockage et portée',
+    'Tableaux et pointeurs',
+    'Pointeurs, références, const, tableaux, fonctions',
+    'POD (Plain Old Data)',
+    'Les ADT en C++',
+    'Compilation et exécution en assembleur 80386',
+    'Instructions arithmétiques (ASM)',
+    'Choix et boucles (ASM)',
+  ],
+  MATHF114:[
+    'Équations différentielles',
+    'Matrices et systèmes',
+    'Les espaces Kⁿ',
+    'Corps Commutatifs',
+    'Espaces vectoriels sur un corps',
+    'Parties Génératrices et Parties Libres',
+    'Bases et dimension',
+    'Applications Linéaires',
+    'Noyau et Image',
+    'Applications Linéaires et Matrices',
+    'Applications Linéaires et Opérations',
+    "Matrice inverse et réciproque d'une application",
+    'Valeurs propres et Vecteurs propres',
+    'Distances et Normes',
+    'Produits scalaires',
+    'Isométries',
+    "Éléments d'arithmétique",
+    'Permutations',
+  ],
+};
+
+const ACHIEVEMENTS = [
+  {id:'first',    icon:'🌱', name:'Premier Pas',   desc:'Cocher son premier chapitre',     chk:s=>totalDone(s)>=1},
+  {id:'streak3',  icon:'🔥', name:'En Feu',         desc:'Atteindre 3 jours de streak',     chk:s=>s.streak>=3},
+  {id:'streak7',  icon:'⚔️', name:'Guerrier',        desc:'7 jours de streak d\'affilée',    chk:s=>s.streak>=7},
+  {id:'phys',     icon:'⚡', name:'Physicien',       desc:'Terminer PHYSF103',               chk:s=>courseDone(s,'PHYSF103')},
+  {id:'algo',     icon:'🌲', name:'Algorithmiste',   desc:'Terminer INFOF103',               chk:s=>courseDone(s,'INFOF103')},
+  {id:'ldp',      icon:'💻', name:'Programmeur',     desc:'Terminer INFOF105',               chk:s=>courseDone(s,'INFOF105')},
+  {id:'math',     icon:'📐', name:'Mathématicien',   desc:'Terminer MATHF114',               chk:s=>courseDone(s,'MATHF114')},
+  {id:'half',     icon:'🗺️', name:'Demi-chemin',     desc:'Atteindre 50% de complétion',     chk:s=>totalPct(s)>=50},
+  {id:'pomo5',    icon:'⏳', name:'Focalisé',         desc:'Compléter 5 sessions Pomodoro',   chk:s=>s.totalSess>=5},
+  {id:'pomo20',   icon:'🕯️', name:'Moine',            desc:'Compléter 20 sessions Pomodoro',  chk:s=>s.totalSess>=20},
+  {id:'day3ch',   icon:'💨', name:'Speedrunner',      desc:'Finir 3+ chapitres en un jour',   chk:s=>s.todayCh>=3},
+  {id:'legend',   icon:'👑', name:'Légendaire',       desc:'Tout terminer — Héros de l\'ULB !',chk:s=>totalPct(s)>=100},
+];
+
+const LEVELS = [
+  {min:0,    max:200,  name:'Apprenti',  av:'🧑‍🎓'},
+  {min:200,  max:500,  name:'Novice',    av:'🧙'},
+  {min:500,  max:900,  name:'Aventurier',av:'🗡️'},
+  {min:900,  max:1400, name:'Guerrier',  av:'⚔️'},
+  {min:1400, max:2000, name:'Chevalier', av:'🛡️'},
+  {min:2000, max:2800, name:'Maître',    av:'🔮'},
+  {min:2800, max:99999,name:'Légendaire',av:'👑'},
+];
+
+const CIRCUMFERENCE = 2*Math.PI*92; // 578.05
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+
+function loadState(){
+  try{
+    const s=JSON.parse(localStorage.getItem('bloxusquest_v3')||'{}');
+    return{
+      ch:s.ch||{}, streak:s.streak||0, lastDate:s.lastDate||null,
+      totalSess:s.totalSess||0, todaySess:s.todaySess||0,
+      todayMins:s.todayMins||0, todayDate:s.todayDate||null,
+      todayCh:s.todayCh||0, unlocked:s.unlocked||[],
+    };
+  }catch{return{ch:{},streak:0,lastDate:null,totalSess:0,todaySess:0,todayMins:0,todayDate:null,todayCh:0,unlocked:[]};}
+}
+function save(){localStorage.setItem('bloxusquest_v3',JSON.stringify(state))}
+
+let state=loadState();
+
+// Reset daily counters if new day
+(function resetDaily(){
+  const today=new Date().toDateString();
+  if(state.todayDate!==today){
+    state.todayDate=today; state.todaySess=0;
+    state.todayMins=0; state.todayCh=0; save();
+  }
+})();
+
+// ══════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════
+
+function totalDone(s){return Object.values(s.ch).filter(Boolean).length}
+function courseDone(s,id){return CHAPTERS[id].every((_,i)=>s.ch[`${id}_${i}`])}
+function totalAll(){return Object.values(CHAPTERS).reduce((a,b)=>a+b.length,0)}
+function totalPct(s){return Math.round(totalDone(s)/totalAll()*100)}
+
+function getXP(s){
+  let xp=0;
+  EXAMS.forEach(e=>CHAPTERS[e.id].forEach((_,i)=>{if(s.ch[`${e.id}_${i}`])xp+=e.xp}));
+  return xp;
+}
+
+function getLevel(xp){
+  for(let i=LEVELS.length-1;i>=0;i--){
+    if(xp>=LEVELS[i].min)return{lv:i+1,...LEVELS[i]};
+  }
+  return{lv:1,...LEVELS[0]};
+}
+
+function threatFor(days){
+  if(days<=3) return{txt:'☠️ CRITIQUE',c:'#c0392b'};
+  if(days<=7) return{txt:'🔴 DANGER',c:'#e74c3c'};
+  if(days<=14)return{txt:'🟡 ALERTE',c:'#f39c12'};
+  return{txt:'🟢 STABLE',c:'#00c896'};
+}
+
+// ══════════════════════════════════════════════════════
+// STREAK
+// ══════════════════════════════════════════════════════
+
+function markStudied(){
+  const today=new Date().toDateString();
+  if(state.lastDate===today)return;
+  const yest=new Date(); yest.setDate(yest.getDate()-1);
+  state.streak=(state.lastDate===yest.toDateString())?state.streak+1:1;
+  state.lastDate=today; save(); renderStreak();
+}
+
+function renderStreak(){
+  document.getElementById('streakNum').textContent=state.streak;
+  if(state.lastDate){
+    const d=new Date(state.lastDate);
+    document.getElementById('lastStudy').textContent=`Dernière session : ${d.toLocaleDateString('fr-FR')}`;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// XP / LEVELS
+// ══════════════════════════════════════════════════════
+
+let _lastLevel=0;
+
+function renderXP(){
+  const xp=getXP(state);
+  const lvl=getLevel(xp);
+  const pct=Math.min(100,((xp-lvl.min)/(lvl.max-lvl.min))*100);
+
+  document.getElementById('xpFill').style.width=pct+'%';
+  document.getElementById('xpTxt').textContent=`${xp} / ${lvl.max} XP`;
+  document.getElementById('lvlTxt').textContent=`Niveau ${lvl.lv} — ${lvl.name}`;
+  document.getElementById('charAv').textContent=lvl.av;
+
+  const done=totalDone(state);
+  document.getElementById('globalStat').textContent=`${done} / ${totalAll()} chapitres maîtrisés · ${totalPct(state)}%`;
+
+  if(_lastLevel>0 && lvl.lv>_lastLevel){
+    showLevelUp(lvl);
+  }
+  _lastLevel=lvl.lv;
+}
+
+function showLevelUp(lvl){
+  const ov=document.getElementById('lvlupOv');
+  document.getElementById('lvlupEm').textContent=lvl.av;
+  document.getElementById('lvlupText').textContent=`NIVEAU ${lvl.lv} !\n${lvl.name}`;
+  ov.classList.add('active');
+  setTimeout(()=>ov.classList.remove('active'),4000);
+}
+
+function xpPopup(amount,x,y){
+  const el=document.createElement('div');
+  el.className='xp-popup';
+  el.textContent=`+${amount} XP ✨`;
+  el.style.left=x+'px'; el.style.top=y+'px';
+  document.body.appendChild(el);
+
+  // Particles
+  for(let i=0;i<6;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.cssText=`width:5px;height:5px;background:var(--gold);left:${x}px;top:${y}px;--tx:${(Math.random()-.5)*80}px;--ty:${-Math.random()*60-20}px`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1300);
+  }
+  setTimeout(()=>el.remove(),1700);
+}
+
+// ══════════════════════════════════════════════════════
+// BOSS COUNTDOWNS
+// ══════════════════════════════════════════════════════
+
+function renderBosses(){
+  const c=document.getElementById('bossList');
+  c.innerHTML='';
+  EXAMS.forEach(e=>{
+    const done=CHAPTERS[e.id].filter((_,i)=>state.ch[`${e.id}_${i}`]).length;
+    const total=CHAPTERS[e.id].length;
+    const pct=Math.round(done/total*100);
+    const el=document.createElement('div');
+    el.className='boss-card'; el.style.borderLeftColor=e.color;
+    el.innerHTML=`
+      <div class="boss-top">
+        <div>
+          <div class="boss-name" style="color:${e.color}">${e.icon} ${e.boss}</div>
+          <div class="boss-sub">${e.dungeon} · ${e.id}</div>
+        </div>
+        <div class="threat-badge" id="thr_${e.id}" style="color:${e.color};border-color:${e.color}">...</div>
+      </div>
+      <div class="boss-cd" id="cd_${e.id}">
+        <div class="cd-unit"><span class="cd-val" style="color:${e.color}">--</span><span class="cd-lbl">Jours</span></div>
+        <div class="cd-unit"><span class="cd-val" style="color:${e.color}">--</span><span class="cd-lbl">Heures</span></div>
+        <div class="cd-unit"><span class="cd-val" style="color:${e.color}">--</span><span class="cd-lbl">Min</span></div>
+        <div class="cd-unit"><span class="cd-val" style="color:${e.color}">--</span><span class="cd-lbl">Sec</span></div>
+      </div>
+      <div class="boss-prog"><div class="boss-prog-fill" style="background:${e.color};width:${pct}%" id="bpf_${e.id}"></div></div>
+      <div class="boss-pct" id="bpt_${e.id}">${done}/${total} chapitres · ${pct}%</div>`;
+    c.appendChild(el);
+  });
+}
+
+function updateBossProgress(){
+  EXAMS.forEach(e=>{
+    const done=CHAPTERS[e.id].filter((_,i)=>state.ch[`${e.id}_${i}`]).length;
+    const total=CHAPTERS[e.id].length;
+    const pct=Math.round(done/total*100);
+    const f=document.getElementById(`bpf_${e.id}`);
+    const t=document.getElementById(`bpt_${e.id}`);
+    if(f){f.style.width=pct+'%'}
+    if(t){t.textContent=`${done}/${total} chapitres · ${pct}%`}
+  });
+}
+
+function tickCountdowns(){
+  const now=new Date();
+  EXAMS.forEach(e=>{
+    const diff=e.date-now;
+    const cdEl=document.getElementById(`cd_${e.id}`);
+    if(!cdEl)return;
+    if(diff<=0){
+      cdEl.innerHTML=`<div style="font-family:'Cinzel',serif;font-size:12px;color:#c0392b;grid-column:1/-1;text-align:center;padding:4px">⚔️ L'EXAMEN EST LÀ !</div>`;
+      return;
+    }
+    const days=Math.floor(diff/86400000);
+    const hours=Math.floor((diff%86400000)/3600000);
+    const mins=Math.floor((diff%3600000)/60000);
+    const secs=Math.floor((diff%60000)/1000);
+    const vals=cdEl.querySelectorAll('.cd-val');
+    if(vals.length===4){
+      vals[0].textContent=String(days).padStart(2,'0');
+      vals[1].textContent=String(hours).padStart(2,'0');
+      vals[2].textContent=String(mins).padStart(2,'0');
+      vals[3].textContent=String(secs).padStart(2,'0');
+    }
+    const thr=threatFor(days);
+    const thrEl=document.getElementById(`thr_${e.id}`);
+    if(thrEl){thrEl.textContent=thr.txt; thrEl.style.color=thr.c; thrEl.style.borderColor=thr.c}
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// QUESTS
+// ══════════════════════════════════════════════════════
+
+function renderQuests(){
+  const c=document.getElementById('questList');
+  c.innerHTML='';
+  EXAMS.forEach(e=>{
+    const chs=CHAPTERS[e.id];
+    const done=chs.filter((_,i)=>state.ch[`${e.id}_${i}`]).length;
+    const total=chs.length;
+    const pct=Math.round(done/total*100);
+    const xpE=done*e.xp; const xpT=total*e.xp;
+
+    const items=chs.map((ch,i)=>{
+      const k=`${e.id}_${i}`;
+      const d=state.ch[k];
+      return`<div class="ch-item${d?' done':''}" onclick="toggleCh('${e.id}',${i},event)">
+        <div class="ch-check">${d?'✓':''}</div>
+        <div class="ch-text">${i+1}. ${ch}</div>
+        <div class="ch-xp">+${e.xp} XP</div>
+      </div>`;
+    }).join('');
+
+    const el=document.createElement('div');
+    el.className='quest-item'; el.style.borderColor=e.color+'55';
+    el.innerHTML=`
+      <div class="quest-header" onclick="this.closest('.quest-item').querySelector('.chapter-list').classList.toggle('open')">
+        <span class="q-icon">${e.icon}</span>
+        <div class="q-info">
+          <div class="q-name" style="color:${e.color}">${e.dungeon}</div>
+          <div class="q-sub">${e.id} · Examen le ${e.date.toLocaleDateString('fr-FR')}</div>
+        </div>
+        <span class="q-xp">${xpE}/${xpT} XP</span>
+      </div>
+      <div class="q-bar-wrap">
+        <div class="q-bar"><div class="q-bar-fill" style="background:${e.color};width:${pct}%"></div></div>
+        <div class="q-bar-lbl">${done}/${total} (${pct}%)</div>
+      </div>
+      <div class="chapter-list" id="cl_${e.id}">${items}</div>`;
+    c.appendChild(el);
+  });
+}
+
+function toggleCh(examId,idx,event){
+  const k=`${examId}_${idx}`;
+  const wasDone=state.ch[k];
+  state.ch[k]=!wasDone;
+
+  if(!wasDone){
+    markStudied();
+    const e=EXAMS.find(x=>x.id===examId);
+    xpPopup(e.xp, event.clientX, event.clientY);
+    state.todayCh++;
+  }
+  save();
+  renderAll();
+  checkAch();
+}
+
+// ══════════════════════════════════════════════════════
+// ACHIEVEMENTS
+// ══════════════════════════════════════════════════════
+
+function renderAch(){
+  const c=document.getElementById('achGrid');
+  c.innerHTML='';
+  ACHIEVEMENTS.forEach(a=>{
+    const u=state.unlocked.includes(a.id);
+    const el=document.createElement('div');
+    el.className=`ach ${u?'unlocked':'locked'}`;
+    el.innerHTML=`<span class="ach-icon">${a.icon}</span><div class="ach-name">${a.name}</div><div class="ach-tip">${a.desc}</div>`;
+    c.appendChild(el);
+  });
+}
+
+function checkAch(){
+  let news=[];
+  ACHIEVEMENTS.forEach(a=>{
+    if(!state.unlocked.includes(a.id)&&a.chk(state)){
+      state.unlocked.push(a.id); news.push(a);
+    }
+  });
+  if(news.length){save(); renderAch(); news.forEach((a,i)=>setTimeout(()=>notify('🏆 Succès Débloqué !',`${a.icon} ${a.name} — ${a.desc}`),i*3500))}
+}
+
+function notify(title,body){
+  const el=document.createElement('div');
+  el.className='notif';
+  el.innerHTML=`<div class="notif-title">${title}</div><div class="notif-body">${body}</div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3400);
+}
+
+// ══════════════════════════════════════════════════════
+// POMODORO
+// ══════════════════════════════════════════════════════
+
+let pomoMode='work';
+let pomoSecs=50*60;
+let pomoRunning=false;
+let pomoInterval=null;
+let sessNum=1;
+const DURATIONS={work:50*60,break:10*60};
+let breakInterval=null;
+
+function setMode(m){
+  pomoMode=m; pomoSecs=DURATIONS[m];
+  clearInterval(pomoInterval); pomoRunning=false;
+  document.getElementById('startBtn').textContent='▶ LANCER';
+  document.getElementById('pillWork').classList.toggle('active',m==='work');
+  document.getElementById('pillBreak').classList.toggle('active',m==='break');
+  document.getElementById('pomoLbl').textContent=m==='work'?'CONCENTRATION':'REPOS';
+  document.getElementById('ringProg').style.stroke=m==='work'?'#ffd700':'#00c896';
+  renderPomoDisplay();
+}
+
+function toggleTimer(){
+  if(pomoRunning){
+    clearInterval(pomoInterval); pomoRunning=false;
+    document.getElementById('startBtn').textContent='▶ REPRENDRE';
+  }else{
+    pomoRunning=true;
+    document.getElementById('startBtn').textContent='⏸ PAUSE';
+    markStudied();
+    pomoInterval=setInterval(tickPomo,1000);
+  }
+}
+
+function tickPomo(){
+  pomoSecs--;
+  renderPomoDisplay();
+  if(pomoSecs<=0){
+    clearInterval(pomoInterval); pomoRunning=false;
+    if(pomoMode==='work'){
+      sessNum++; state.totalSess++; state.todaySess++; state.todayMins+=50;
+      save(); renderPomoStats(); checkAch();
+      notify('⚔️ Session terminée !',`Bravo ! +50 min · Session #${sessNum-1} accomplie`);
+      setTimeout(()=>{setMode('break'); showBreak(10*60);},600);
+    }else{
+      document.getElementById('breakOv').classList.remove('active');
+      setMode('work');
+      notify('⚡ Pause terminée !','Retour au combat, aventurier !');
+    }
+    document.getElementById('startBtn').textContent='▶ LANCER';
+    document.getElementById('pomoSess').textContent=`Session #${sessNum}`;
+  }
+}
+
+function resetTimer(){
+  clearInterval(pomoInterval); pomoRunning=false;
+  pomoSecs=DURATIONS[pomoMode];
+  document.getElementById('startBtn').textContent='▶ LANCER';
+  renderPomoDisplay();
+}
+
+function renderPomoDisplay(){
+  const m=Math.floor(pomoSecs/60), s=pomoSecs%60;
+  document.getElementById('pomoTime').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  const prog=pomoSecs/DURATIONS[pomoMode];
+  const offset=CIRCUMFERENCE*(1-prog);
+  document.getElementById('ringProg').style.strokeDashoffset=offset;
+}
+
+function renderPomoStats(){
+  document.getElementById('todaySess').textContent=state.todaySess;
+  document.getElementById('todayMins').textContent=state.todayMins;
+  document.getElementById('totalSess').textContent=state.totalSess;
+}
+
+function showBreak(secs){
+  let s=secs;
+  document.getElementById('breakOv').classList.add('active');
+  clearInterval(breakInterval);
+  function tick(){
+    const m=Math.floor(s/60),sec=s%60;
+    document.getElementById('breakTime').textContent=String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+    if(s<=0){clearInterval(breakInterval); skipBreak();}
+    s--;
+  }
+  tick();
+  breakInterval=setInterval(tick,1000);
+}
+
+function skipBreak(){
+  clearInterval(breakInterval);
+  document.getElementById('breakOv').classList.remove('active');
+  setMode('work');
+}
+
+// ══════════════════════════════════════════════════════
+// STARFIELD
+// ══════════════════════════════════════════════════════
+
+function initStarfield(){
+  const cv=document.getElementById('starfield');
+  const ctx=cv.getContext('2d');
+  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  const stars=Array.from({length:140},()=>({
+    x:Math.random()*cv.width, y:Math.random()*cv.height,
+    r:Math.random()*1.4+0.2, o:Math.random()*.6+.1,
+    pulse:Math.random()*Math.PI*2,
+  }));
+  // Shooting stars
+  let shootTimer=0;
+  const shooting=[];
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    const t=Date.now()/1000;
+    stars.forEach(s=>{
+      s.o=.15+Math.abs(Math.sin(t*0.5+s.pulse))*.55;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,185,255,${s.o})`; ctx.fill();
+    });
+    // Shooting stars
+    shootTimer++;
+    if(shootTimer>200){shootTimer=0; shooting.push({x:Math.random()*cv.width,y:Math.random()*cv.height*.5,len:0,speed:Math.random()*8+6,angle:Math.PI/6+Math.random()*.3,life:0})}
+    shooting.forEach((ss,i)=>{
+      ss.len+=ss.speed; ss.life++;
+      const ex=ss.x+Math.cos(ss.angle)*ss.len;
+      const ey=ss.y+Math.sin(ss.angle)*ss.len;
+      const grad=ctx.createLinearGradient(ss.x,ss.y,ex,ey);
+      const al=Math.min(1,(80-ss.life)/80);
+      grad.addColorStop(0,`rgba(255,220,150,0)`);
+      grad.addColorStop(1,`rgba(255,220,150,${al})`);
+      ctx.beginPath(); ctx.moveTo(ss.x,ss.y); ctx.lineTo(ex,ey);
+      ctx.strokeStyle=grad; ctx.lineWidth=1.5; ctx.stroke();
+      if(ss.life>80) shooting.splice(i,1);
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  window.addEventListener('resize',()=>{cv.width=window.innerWidth;cv.height=window.innerHeight});
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER ALL
+// ══════════════════════════════════════════════════════
+
+function renderAll(){
+  renderBosses();
+  renderXP();
+  renderQuests();
+  renderAch();
+  renderStreak();
+  renderPomoStats();
+  updateBossProgress();
+  document.getElementById('pomoSess').textContent=`Session #${sessNum}`;
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+
+_lastLevel=getLevel(getXP(state)).lv;
+initStarfield();
+renderAll();
+renderPomoDisplay();
+tickCountdowns();
+setInterval(tickCountdowns,1000);
+checkAch();
+</script>
+</body>
+</html>
