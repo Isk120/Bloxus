@@ -100,6 +100,10 @@ body{
 .streak-lbl{font-size:9px;color:rgba(255,107,53,.6);letter-spacing:1px;text-transform:uppercase}
 .last-study{font-size:10px;color:var(--text-dim)}
 
+/* Streak danger warning */
+.streak-danger{font-size:9px;color:var(--ember);letter-spacing:.5px;animation:pulse-warn 1.2s infinite alternate}
+@keyframes pulse-warn{0%{opacity:.5}100%{opacity:1}}
+
 /* ─────────────── MAIN LAYOUT ─────────────── */
 .main{display:grid;grid-template-columns:290px 1fr 300px;gap:14px;align-items:start}
 
@@ -115,7 +119,7 @@ body{
   background:linear-gradient(180deg,#16163a 0%,var(--bg-card) 100%);
   border-bottom:1px solid var(--border-gold);
 }
-.card-title{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+.card-title{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;flex:1}
 .card-body{padding:14px}
 
 /* ─────────────── BOSS COUNTDOWNS ─────────────── */
@@ -140,7 +144,7 @@ body{
 
 /* ─────────────── POMODORO ─────────────── */
 .pomo-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
-.pomo-mode-pills{display:flex;gap:8px}
+.pomo-mode-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .mode-pill{
   font-family:'Cinzel',serif;font-size:10px;padding:5px 14px;border-radius:12px;
   cursor:pointer;border:1px solid var(--border-gold);color:var(--text-dim);background:transparent;transition:all .2s;
@@ -158,6 +162,13 @@ body{
 .pomo-lbl{font-size:10px;color:var(--text-sec);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
 .pomo-sess{font-size:10px;color:var(--text-dim);margin-top:2px}
 .pomo-btns{display:flex;gap:10px}
+
+/* Break duration pills */
+.break-dur-pills{display:flex;gap:6px;align-items:center}
+.break-dur-lbl{font-family:'Cinzel',serif;font-size:9px;color:var(--text-dim);letter-spacing:1px}
+.dur-pill{font-family:'Cinzel',serif;font-size:9px;padding:3px 10px;border-radius:10px;cursor:pointer;border:1px solid var(--border-gold);color:var(--text-dim);background:transparent;transition:all .2s}
+.dur-pill.active{background:var(--bg-card2);color:var(--emerald);border-color:var(--emerald)}
+
 .btn{
   font-family:'Cinzel',serif;font-size:11px;padding:9px 20px;border-radius:3px;cursor:pointer;
   border:1px solid;transition:all .2s;letter-spacing:.5px;font-weight:600;
@@ -166,6 +177,11 @@ body{
 .btn-gold:hover{background:linear-gradient(180deg,#3d2800,#281600);box-shadow:0 0 14px var(--shadow-gold)}
 .btn-ghost{background:linear-gradient(180deg,#16163a,var(--bg-card));border-color:var(--border-gold);color:var(--text-sec)}
 .btn-ghost:hover{border-color:var(--border-bright);color:var(--text-prim)}
+.btn-danger{background:linear-gradient(180deg,#2a0a00,#1a0500);border-color:#c0392b;color:#e74c3c}
+.btn-danger:hover{background:linear-gradient(180deg,#3a0f00,#280800);box-shadow:0 0 10px rgba(192,57,43,.3)}
+.btn-emerald{background:linear-gradient(180deg,#00200f,#001508);border-color:var(--emerald);color:var(--emerald)}
+.btn-emerald:hover{background:linear-gradient(180deg,#003018,#002010);box-shadow:0 0 10px rgba(0,200,150,.25)}
+
 .pomo-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
 .pomo-stat{
   text-align:center;background:var(--bg-dark);border:1px solid var(--border-gold);border-radius:3px;padding:9px 4px;
@@ -227,7 +243,12 @@ body{
   position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
   background:#0a0a20;border:1px solid var(--border-bright);padding:6px 10px;border-radius:3px;
   font-size:10px;color:var(--text-prim);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;z-index:200;
+  /* Fix mobile overflow */
+  max-width:min(200px, 80vw);white-space:normal;text-align:left;
 }
+/* Keep tooltip inside screen */
+.ach:nth-child(3n) .ach-tip{left:auto;right:0;transform:none}
+.ach:nth-child(3n-2) .ach-tip{left:0;transform:none}
 .ach:hover .ach-tip{opacity:1}
 
 /* ─────────────── NOTIFICATIONS ─────────────── */
@@ -272,13 +293,84 @@ body{
 }
 .lvlup-ov.active{display:flex;animation:flashIn .4s ease}
 @keyframes flashIn{0%{opacity:0}50%{opacity:1}100%{opacity:1}}
-.lvlup-big{font-family:'Cinzel Decorative',cursive;font-size:36px;color:var(--gold);text-shadow:0 0 40px var(--shadow-gold);text-align:center;letter-spacing:3px}
+.lvlup-big{
+  font-family:'Cinzel Decorative',cursive;font-size:36px;color:var(--gold);
+  text-shadow:0 0 40px var(--shadow-gold);text-align:center;letter-spacing:3px;
+  white-space:pre-line; /* Fix \n display */
+}
 .lvlup-em{font-size:80px;animation:spin 1s ease forwards}
 @keyframes spin{0%{transform:rotate(0) scale(0);opacity:0}50%{transform:rotate(360deg) scale(1.2);opacity:1}100%{transform:rotate(360deg) scale(1);opacity:1}}
 
+/* ─────────────── IMPORT/EXPORT MODAL ─────────────── */
+.modal-ov{
+  display:none;position:fixed;inset:0;background:rgba(0,0,10,.88);z-index:1003;
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-ov.active{display:flex}
+.modal-box{
+  background:var(--bg-card);border:1px solid var(--border-bright);border-radius:4px;
+  max-width:520px;width:100%;position:relative;overflow:hidden;
+}
+.modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.modal-head{
+  padding:16px 20px;display:flex;align-items:center;gap:10px;
+  background:linear-gradient(180deg,#16163a,var(--bg-card));
+  border-bottom:1px solid var(--border-gold);
+}
+.modal-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:1px;flex:1}
+.modal-close{background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:0 4px;transition:color .2s}
+.modal-close:hover{color:var(--text-prim)}
+.modal-body{padding:20px;display:flex;flex-direction:column;gap:14px}
+.modal-section{display:flex;flex-direction:column;gap:8px}
+.modal-section-title{font-family:'Cinzel',serif;font-size:10px;color:var(--text-sec);letter-spacing:1.5px;text-transform:uppercase}
+.modal-textarea{
+  width:100%;height:100px;background:#0a0a18;border:1px solid var(--border-gold);border-radius:3px;
+  color:var(--text-prim);font-family:monospace;font-size:11px;padding:10px;resize:vertical;
+  outline:none;transition:border-color .2s;
+}
+.modal-textarea:focus{border-color:var(--border-bright)}
+.modal-row{display:flex;gap:8px;flex-wrap:wrap}
+.modal-info{font-size:11px;color:var(--text-dim);font-style:italic}
+
+/* ─────────────── CONFIRM MODAL ─────────────── */
+.confirm-ov{
+  display:none;position:fixed;inset:0;background:rgba(0,0,10,.88);z-index:1004;
+  align-items:center;justify-content:center;padding:20px;
+}
+.confirm-ov.active{display:flex}
+.confirm-box{
+  background:var(--bg-card);border:1px solid #c0392b;border-radius:4px;
+  max-width:360px;width:100%;padding:24px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.confirm-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#c0392b,transparent)}
+.confirm-em{font-size:40px;margin-bottom:12px}
+.confirm-title{font-family:'Cinzel',serif;font-size:14px;color:#e74c3c;margin-bottom:8px;font-weight:600}
+.confirm-desc{font-size:13px;color:var(--text-sec);margin-bottom:18px;line-height:1.5}
+.confirm-row{display:flex;gap:10px;justify-content:center}
+
+/* ─────────────── BOTTOM TOOLBAR ─────────────── */
+.toolbar{
+  display:flex;align-items:center;justify-content:space-between;padding:10px 16px;
+  background:linear-gradient(180deg,#0c0c20,#080814);
+  border:1px solid var(--border-gold);border-radius:3px;gap:10px;flex-wrap:wrap;
+}
+.toolbar-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.toolbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.toolbar-info{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:.5px}
+
 /* ─────────────── RESPONSIVE ─────────────── */
-@media(max-width:1100px){.main{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){.main{grid-template-columns:1fr}.header{grid-template-columns:1fr;gap:10px}}
+@media(max-width:1100px){
+  .main{grid-template-columns:1fr 1fr}
+  .main>div:last-child{grid-column:1/-1}
+}
+@media(max-width:700px){
+  .main{grid-template-columns:1fr}
+  .header{grid-template-columns:1fr;gap:10px;text-align:center}
+  .char-wrap{justify-content:center}
+  .streak-wrap{align-items:center}
+  .xp-bar-wrap{width:100%;max-width:220px}
+}
 
 /* ─────────────── PARTICLES ─────────────── */
 .particle{
@@ -306,6 +398,51 @@ body{
   <div class="lvlup-em" id="lvlupEm">👑</div>
   <div class="lvlup-big" id="lvlupText">LEVEL UP !</div>
   <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--text-sec);letter-spacing:2px">Touche l'écran pour continuer</div>
+</div>
+
+<!-- ── IMPORT/EXPORT MODAL ── -->
+<div class="modal-ov" id="importExportModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span>📦</span>
+      <span class="modal-title">Importer / Exporter la Sauvegarde</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">📤 Exporter</div>
+        <p class="modal-info">Copie ce code pour sauvegarder ta progression ailleurs ou la partager.</p>
+        <textarea class="modal-textarea" id="exportData" readonly onclick="this.select()"></textarea>
+        <div class="modal-row">
+          <button class="btn btn-gold" onclick="copyExport()">📋 Copier</button>
+          <button class="btn btn-ghost" onclick="downloadExport()">💾 Télécharger .json</button>
+        </div>
+      </div>
+      <div class="modal-section" style="border-top:1px solid var(--border-gold);padding-top:14px">
+        <div class="modal-section-title">📥 Importer</div>
+        <p class="modal-info">Colle un code de sauvegarde exporté pour restaurer ta progression.</p>
+        <textarea class="modal-textarea" id="importData" placeholder="Colle ici ton code de sauvegarde…"></textarea>
+        <div class="modal-row">
+          <button class="btn btn-emerald" onclick="doImport()">⚡ Importer & Charger</button>
+          <button class="btn btn-ghost" onclick="loadFromFile()">📂 Importer depuis fichier</button>
+        </div>
+        <input type="file" id="fileInput" accept=".json" style="display:none" onchange="readFile(event)">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONFIRM RESET MODAL ── -->
+<div class="confirm-ov" id="confirmModal">
+  <div class="confirm-box">
+    <div class="confirm-em">⚠️</div>
+    <div class="confirm-title">Réinitialiser la Progression ?</div>
+    <div class="confirm-desc">Cette action effacera <strong>toute ta progression</strong>, tes sessions Pomodoro et tes succès débloqués. Cette action est <strong>irréversible</strong>.</div>
+    <div class="confirm-row">
+      <button class="btn btn-danger" onclick="doReset()">🗑 Tout effacer</button>
+      <button class="btn btn-ghost" onclick="closeConfirm()">Annuler</button>
+    </div>
+  </div>
 </div>
 
 <div class="app">
@@ -336,6 +473,7 @@ body{
         <span class="streak-lbl">JOURS</span>
       </div>
       <div class="last-study" id="lastStudy">Aucune session encore</div>
+      <div id="streakWarning" style="display:none" class="streak-danger">⚠️ Étudie aujourd'hui !</div>
     </div>
   </div>
 
@@ -360,7 +498,14 @@ body{
           <div class="pomo-wrap">
             <div class="pomo-mode-pills">
               <button class="mode-pill active" id="pillWork" onclick="setMode('work')">⚔️ Focus 50m</button>
-              <button class="mode-pill" id="pillBreak" onclick="setMode('break')">🌿 Repos 10m</button>
+              <button class="mode-pill" id="pillBreak" onclick="setMode('break')">🌿 Repos</button>
+            </div>
+            <!-- Break duration selector (only shown in break mode) -->
+            <div class="break-dur-pills" id="breakDurPills" style="display:none">
+              <span class="break-dur-lbl">Durée :</span>
+              <button class="dur-pill active" id="durPill5" onclick="setBreakDur(5)">5m</button>
+              <button class="dur-pill" id="durPill10" onclick="setBreakDur(10)">10m</button>
+              <button class="dur-pill" id="durPill15" onclick="setBreakDur(15)">15m</button>
             </div>
             <div class="pomo-ring">
               <svg viewBox="0 0 210 210">
@@ -381,8 +526,8 @@ body{
               <button class="btn btn-ghost" onclick="resetTimer()">↺ RESET</button>
             </div>
             <div class="pomo-stats">
-              <div class="pomo-stat"><span class="pomo-stat-val" id="todaySess">0</span><span class="pomo-stat-lbl">Sessions</span></div>
-              <div class="pomo-stat"><span class="pomo-stat-val" id="todayMins">0</span><span class="pomo-stat-lbl">Minutes</span></div>
+              <div class="pomo-stat"><span class="pomo-stat-val" id="todaySess">0</span><span class="pomo-stat-lbl">Séances auj.</span></div>
+              <div class="pomo-stat"><span class="pomo-stat-val" id="todayMins">0h00</span><span class="pomo-stat-lbl">Temps auj.</span></div>
               <div class="pomo-stat"><span class="pomo-stat-val" id="totalSess">0</span><span class="pomo-stat-lbl">Total</span></div>
             </div>
           </div>
@@ -405,6 +550,19 @@ body{
     </div>
 
   </div>
+
+  <!-- ══ TOOLBAR ══ -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <span class="toolbar-info">⚙️ Gestion</span>
+      <button class="btn btn-emerald" onclick="openModal()" style="font-size:10px;padding:6px 14px">📦 Importer / Exporter</button>
+      <button class="btn btn-danger" onclick="openConfirm()" style="font-size:10px;padding:6px 14px">🗑 Réinitialiser</button>
+    </div>
+    <div class="toolbar-right">
+      <span class="toolbar-info" id="saveStatus">💾 Sauvegarde automatique</span>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -491,18 +649,18 @@ const CHAPTERS = {
 };
 
 const ACHIEVEMENTS = [
-  {id:'first',    icon:'🌱', name:'Premier Pas',   desc:'Cocher son premier chapitre',     chk:s=>totalDone(s)>=1},
-  {id:'streak3',  icon:'🔥', name:'En Feu',         desc:'Atteindre 3 jours de streak',     chk:s=>s.streak>=3},
-  {id:'streak7',  icon:'⚔️', name:'Guerrier',        desc:'7 jours de streak d\'affilée',    chk:s=>s.streak>=7},
-  {id:'phys',     icon:'⚡', name:'Physicien',       desc:'Terminer PHYSF103',               chk:s=>courseDone(s,'PHYSF103')},
-  {id:'algo',     icon:'🌲', name:'Algorithmiste',   desc:'Terminer INFOF103',               chk:s=>courseDone(s,'INFOF103')},
-  {id:'ldp',      icon:'💻', name:'Programmeur',     desc:'Terminer INFOF105',               chk:s=>courseDone(s,'INFOF105')},
-  {id:'math',     icon:'📐', name:'Mathématicien',   desc:'Terminer MATHF114',               chk:s=>courseDone(s,'MATHF114')},
-  {id:'half',     icon:'🗺️', name:'Demi-chemin',     desc:'Atteindre 50% de complétion',     chk:s=>totalPct(s)>=50},
-  {id:'pomo5',    icon:'⏳', name:'Focalisé',         desc:'Compléter 5 sessions Pomodoro',   chk:s=>s.totalSess>=5},
-  {id:'pomo20',   icon:'🕯️', name:'Moine',            desc:'Compléter 20 sessions Pomodoro',  chk:s=>s.totalSess>=20},
-  {id:'day3ch',   icon:'💨', name:'Speedrunner',      desc:'Finir 3+ chapitres en un jour',   chk:s=>s.todayCh>=3},
-  {id:'legend',   icon:'👑', name:'Légendaire',       desc:'Tout terminer — Héros de l\'ULB !',chk:s=>totalPct(s)>=100},
+  {id:'first',    icon:'🌱', name:'Premier Pas',   desc:'Cocher son premier chapitre',        chk:s=>totalDone(s)>=1},
+  {id:'streak3',  icon:'🔥', name:'En Feu',         desc:'Atteindre 3 jours de streak',        chk:s=>s.streak>=3},
+  {id:'streak7',  icon:'⚔️', name:'Guerrier',        desc:"7 jours de streak d'affilée",        chk:s=>s.streak>=7},
+  {id:'phys',     icon:'⚡', name:'Physicien',       desc:'Terminer PHYSF103',                  chk:s=>courseDone(s,'PHYSF103')},
+  {id:'algo',     icon:'🌲', name:'Algorithmiste',   desc:'Terminer INFOF103',                  chk:s=>courseDone(s,'INFOF103')},
+  {id:'ldp',      icon:'💻', name:'Programmeur',     desc:'Terminer INFOF105',                  chk:s=>courseDone(s,'INFOF105')},
+  {id:'math',     icon:'📐', name:'Mathématicien',   desc:'Terminer MATHF114',                  chk:s=>courseDone(s,'MATHF114')},
+  {id:'half',     icon:'🗺️', name:'Demi-chemin',     desc:'Atteindre 50% de complétion',        chk:s=>totalPct(s)>=50},
+  {id:'pomo5',    icon:'⏳', name:'Focalisé',         desc:'Compléter 5 sessions Pomodoro',      chk:s=>s.totalSess>=5},
+  {id:'pomo20',   icon:'🕯️', name:'Moine',            desc:'Compléter 20 sessions Pomodoro',     chk:s=>s.totalSess>=20},
+  {id:'day3ch',   icon:'💨', name:'Speedrunner',      desc:'Cocher 3+ chapitres en un jour',     chk:s=>s.todayCh>=3},
+  {id:'legend',   icon:'👑', name:'Légendaire',       desc:"Tout terminer — Héros de l'ULB !",   chk:s=>totalPct(s)>=100},
 ];
 
 const LEVELS = [
@@ -521,20 +679,30 @@ const CIRCUMFERENCE = 2*Math.PI*92; // 578.05
 // STATE
 // ══════════════════════════════════════════════════════
 
+const STORAGE_KEY = 'bloxusquest_v4';
+
+function defaultState(){
+  return{ch:{},streak:0,lastDate:null,totalSess:0,todaySess:0,
+    todayMins:0,todayDate:null,todayCh:0,unlocked:[],sessNum:1};
+}
+
 function loadState(){
   try{
-    const s=JSON.parse(localStorage.getItem('bloxusquest_v3')||'{}');
-    return{
-      ch:s.ch||{}, streak:s.streak||0, lastDate:s.lastDate||null,
-      totalSess:s.totalSess||0, todaySess:s.todaySess||0,
-      todayMins:s.todayMins||0, todayDate:s.todayDate||null,
-      todayCh:s.todayCh||0, unlocked:s.unlocked||[],
-    };
-  }catch{return{ch:{},streak:0,lastDate:null,totalSess:0,todaySess:0,todayMins:0,todayDate:null,todayCh:0,unlocked:[]};}
+    const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+    const d=defaultState();
+    return{...d,...s,ch:s.ch||{}};
+  }catch{return defaultState();}
 }
-function save(){localStorage.setItem('bloxusquest_v3',JSON.stringify(state))}
+
+function save(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  flashSaveStatus();
+}
 
 let state=loadState();
+
+// Sync sessNum from state
+let sessNum = state.sessNum || 1;
 
 // Reset daily counters if new day
 (function resetDaily(){
@@ -574,6 +742,28 @@ function threatFor(days){
   return{txt:'🟢 STABLE',c:'#00c896'};
 }
 
+function fmtMins(mins){
+  const h=Math.floor(mins/60), m=mins%60;
+  return h>0 ? `${h}h${String(m).padStart(2,'0')}` : `${m}m`;
+}
+
+// ══════════════════════════════════════════════════════
+// SAVE STATUS FLASH
+// ══════════════════════════════════════════════════════
+
+let saveFlashTimer=null;
+function flashSaveStatus(){
+  const el=document.getElementById('saveStatus');
+  if(!el)return;
+  el.textContent='✅ Sauvegardé !';
+  el.style.color='var(--emerald)';
+  clearTimeout(saveFlashTimer);
+  saveFlashTimer=setTimeout(()=>{
+    el.textContent='💾 Sauvegarde automatique';
+    el.style.color='';
+  },2000);
+}
+
 // ══════════════════════════════════════════════════════
 // STREAK
 // ══════════════════════════════════════════════════════
@@ -590,7 +780,15 @@ function renderStreak(){
   document.getElementById('streakNum').textContent=state.streak;
   if(state.lastDate){
     const d=new Date(state.lastDate);
-    document.getElementById('lastStudy').textContent=`Dernière session : ${d.toLocaleDateString('fr-FR')}`;
+    document.getElementById('lastStudy').textContent=`Dernière : ${d.toLocaleDateString('fr-FR')}`;
+  }
+  // Streak danger: has streak but hasn't studied today
+  const today=new Date().toDateString();
+  const warn=document.getElementById('streakWarning');
+  if(state.streak>0 && state.lastDate!==today){
+    warn.style.display='block';
+  }else{
+    warn.style.display='none';
   }
 }
 
@@ -611,7 +809,7 @@ function renderXP(){
   document.getElementById('charAv').textContent=lvl.av;
 
   const done=totalDone(state);
-  document.getElementById('globalStat').textContent=`${done} / ${totalAll()} chapitres maîtrisés · ${totalPct(state)}%`;
+  document.getElementById('globalStat').textContent=`${done} / ${totalAll()} chapitres · ${totalPct(state)}%`;
 
   if(_lastLevel>0 && lvl.lv>_lastLevel){
     showLevelUp(lvl);
@@ -633,8 +831,6 @@ function xpPopup(amount,x,y){
   el.textContent=`+${amount} XP ✨`;
   el.style.left=x+'px'; el.style.top=y+'px';
   document.body.appendChild(el);
-
-  // Particles
   for(let i=0;i<6;i++){
     const p=document.createElement('div');
     p.className='particle';
@@ -664,7 +860,7 @@ function renderBosses(){
           <div class="boss-name" style="color:${e.color}">${e.icon} ${e.boss}</div>
           <div class="boss-sub">${e.dungeon} · ${e.id}</div>
         </div>
-        <div class="threat-badge" id="thr_${e.id}" style="color:${e.color};border-color:${e.color}">...</div>
+        <div class="threat-badge" id="thr_${e.id}" style="color:${e.color};border-color:${e.color}">…</div>
       </div>
       <div class="boss-cd" id="cd_${e.id}">
         <div class="cd-unit"><span class="cd-val" style="color:${e.color}">--</span><span class="cd-lbl">Jours</span></div>
@@ -685,8 +881,8 @@ function updateBossProgress(){
     const pct=Math.round(done/total*100);
     const f=document.getElementById(`bpf_${e.id}`);
     const t=document.getElementById(`bpt_${e.id}`);
-    if(f){f.style.width=pct+'%'}
-    if(t){t.textContent=`${done}/${total} chapitres · ${pct}%`}
+    if(f)f.style.width=pct+'%';
+    if(t)t.textContent=`${done}/${total} chapitres · ${pct}%`;
   });
 }
 
@@ -718,11 +914,14 @@ function tickCountdowns(){
 }
 
 // ══════════════════════════════════════════════════════
-// QUESTS
+// QUESTS — optimized rendering
 // ══════════════════════════════════════════════════════
 
 function renderQuests(){
   const c=document.getElementById('questList');
+  // Remember which quest lists are open
+  const openIds=new Set();
+  c.querySelectorAll('.chapter-list.open').forEach(el=>openIds.add(el.id));
   c.innerHTML='';
   EXAMS.forEach(e=>{
     const chs=CHAPTERS[e.id];
@@ -730,11 +929,13 @@ function renderQuests(){
     const total=chs.length;
     const pct=Math.round(done/total*100);
     const xpE=done*e.xp; const xpT=total*e.xp;
+    const listId=`cl_${e.id}`;
+    const isOpen=openIds.has(listId);
 
     const items=chs.map((ch,i)=>{
       const k=`${e.id}_${i}`;
       const d=state.ch[k];
-      return`<div class="ch-item${d?' done':''}" onclick="toggleCh('${e.id}',${i},event)">
+      return`<div class="ch-item${d?' done':''}" data-exam="${e.id}" data-idx="${i}">
         <div class="ch-check">${d?'✓':''}</div>
         <div class="ch-text">${i+1}. ${ch}</div>
         <div class="ch-xp">+${e.xp} XP</div>
@@ -744,7 +945,7 @@ function renderQuests(){
     const el=document.createElement('div');
     el.className='quest-item'; el.style.borderColor=e.color+'55';
     el.innerHTML=`
-      <div class="quest-header" onclick="this.closest('.quest-item').querySelector('.chapter-list').classList.toggle('open')">
+      <div class="quest-header">
         <span class="q-icon">${e.icon}</span>
         <div class="q-info">
           <div class="q-name" style="color:${e.color}">${e.dungeon}</div>
@@ -756,8 +957,47 @@ function renderQuests(){
         <div class="q-bar"><div class="q-bar-fill" style="background:${e.color};width:${pct}%"></div></div>
         <div class="q-bar-lbl">${done}/${total} (${pct}%)</div>
       </div>
-      <div class="chapter-list" id="cl_${e.id}">${items}</div>`;
+      <div class="chapter-list${isOpen?' open':''}" id="${listId}">${items}</div>`;
+    // Toggle on header click
+    el.querySelector('.quest-header').addEventListener('click',()=>{
+      el.querySelector('.chapter-list').classList.toggle('open');
+    });
+    // Chapter toggle on chapter click (event delegation)
+    el.querySelector('.chapter-list').addEventListener('click',ev=>{
+      const item=ev.target.closest('.ch-item');
+      if(!item)return;
+      toggleCh(item.dataset.exam, parseInt(item.dataset.idx), ev);
+    });
     c.appendChild(el);
+  });
+}
+
+// Update only changed quest item inline (no full rebuild)
+function patchQuestItem(examId){
+  const e=EXAMS.find(x=>x.id===examId);
+  const chs=CHAPTERS[examId];
+  const done=chs.filter((_,i)=>state.ch[`${examId}_${i}`]).length;
+  const total=chs.length;
+  const pct=Math.round(done/total*100);
+  const xpE=done*e.xp; const xpT=total*e.xp;
+  // Update xp badge, bar, label
+  const listEl=document.getElementById(`cl_${examId}`);
+  if(!listEl)return;
+  const questItem=listEl.closest('.quest-item');
+  if(!questItem)return;
+  questItem.querySelector('.q-xp').textContent=`${xpE}/${xpT} XP`;
+  const fill=questItem.querySelector('.q-bar-fill');
+  if(fill)fill.style.width=pct+'%';
+  const lbl=questItem.querySelector('.q-bar-lbl');
+  if(lbl)lbl.textContent=`${done}/${total} (${pct}%)`;
+  // Update chapter items
+  chs.forEach((_,i)=>{
+    const k=`${examId}_${i}`;
+    const d=state.ch[k];
+    const item=listEl.querySelector(`[data-exam="${examId}"][data-idx="${i}"]`);
+    if(!item)return;
+    item.classList.toggle('done',!!d);
+    item.querySelector('.ch-check').textContent=d?'✓':'';
   });
 }
 
@@ -773,7 +1013,12 @@ function toggleCh(examId,idx,event){
     state.todayCh++;
   }
   save();
-  renderAll();
+
+  // Targeted updates instead of full renderAll
+  patchQuestItem(examId);
+  updateBossProgress();
+  renderXP();
+  renderPomoStats();
   checkAch();
 }
 
@@ -816,21 +1061,39 @@ function notify(title,body){
 // ══════════════════════════════════════════════════════
 
 let pomoMode='work';
+let breakDurMins=10;
 let pomoSecs=50*60;
 let pomoRunning=false;
 let pomoInterval=null;
-let sessNum=1;
-const DURATIONS={work:50*60,break:10*60};
 let breakInterval=null;
 
+const WORK_SECS=50*60;
+
+function getBreakSecs(){return breakDurMins*60;}
+
+function setBreakDur(mins){
+  breakDurMins=mins;
+  ['5','10','15'].forEach(d=>{
+    document.getElementById(`durPill${d}`).classList.toggle('active',String(mins)===d);
+  });
+  if(pomoMode==='break'){
+    clearInterval(pomoInterval); pomoRunning=false;
+    pomoSecs=getBreakSecs();
+    document.getElementById('startBtn').textContent='▶ LANCER';
+    renderPomoDisplay();
+  }
+}
+
 function setMode(m){
-  pomoMode=m; pomoSecs=DURATIONS[m];
+  pomoMode=m;
+  pomoSecs=(m==='work')?WORK_SECS:getBreakSecs();
   clearInterval(pomoInterval); pomoRunning=false;
   document.getElementById('startBtn').textContent='▶ LANCER';
   document.getElementById('pillWork').classList.toggle('active',m==='work');
   document.getElementById('pillBreak').classList.toggle('active',m==='break');
   document.getElementById('pomoLbl').textContent=m==='work'?'CONCENTRATION':'REPOS';
   document.getElementById('ringProg').style.stroke=m==='work'?'#ffd700':'#00c896';
+  document.getElementById('breakDurPills').style.display=m==='break'?'flex':'none';
   renderPomoDisplay();
 }
 
@@ -852,10 +1115,12 @@ function tickPomo(){
   if(pomoSecs<=0){
     clearInterval(pomoInterval); pomoRunning=false;
     if(pomoMode==='work'){
-      sessNum++; state.totalSess++; state.todaySess++; state.todayMins+=50;
+      sessNum++;
+      state.totalSess++; state.todaySess++; state.todayMins+=50;
+      state.sessNum=sessNum;
       save(); renderPomoStats(); checkAch();
       notify('⚔️ Session terminée !',`Bravo ! +50 min · Session #${sessNum-1} accomplie`);
-      setTimeout(()=>{setMode('break'); showBreak(10*60);},600);
+      setTimeout(()=>{setMode('break'); showBreak(getBreakSecs());},600);
     }else{
       document.getElementById('breakOv').classList.remove('active');
       setMode('work');
@@ -868,7 +1133,7 @@ function tickPomo(){
 
 function resetTimer(){
   clearInterval(pomoInterval); pomoRunning=false;
-  pomoSecs=DURATIONS[pomoMode];
+  pomoSecs=(pomoMode==='work')?WORK_SECS:getBreakSecs();
   document.getElementById('startBtn').textContent='▶ LANCER';
   renderPomoDisplay();
 }
@@ -876,14 +1141,15 @@ function resetTimer(){
 function renderPomoDisplay(){
   const m=Math.floor(pomoSecs/60), s=pomoSecs%60;
   document.getElementById('pomoTime').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-  const prog=pomoSecs/DURATIONS[pomoMode];
+  const total=(pomoMode==='work')?WORK_SECS:getBreakSecs();
+  const prog=pomoSecs/total;
   const offset=CIRCUMFERENCE*(1-prog);
   document.getElementById('ringProg').style.strokeDashoffset=offset;
 }
 
 function renderPomoStats(){
   document.getElementById('todaySess').textContent=state.todaySess;
-  document.getElementById('todayMins').textContent=state.todayMins;
+  document.getElementById('todayMins').textContent=fmtMins(state.todayMins);
   document.getElementById('totalSess').textContent=state.totalSess;
 }
 
@@ -908,6 +1174,108 @@ function skipBreak(){
 }
 
 // ══════════════════════════════════════════════════════
+// IMPORT / EXPORT
+// ══════════════════════════════════════════════════════
+
+function openModal(){
+  const encoded=JSON.stringify(state, null, 2);
+  document.getElementById('exportData').value=encoded;
+  document.getElementById('importData').value='';
+  document.getElementById('importExportModal').classList.add('active');
+}
+
+function closeModal(){
+  document.getElementById('importExportModal').classList.remove('active');
+}
+
+function copyExport(){
+  const ta=document.getElementById('exportData');
+  ta.select();
+  document.execCommand('copy');
+  notify('📋 Copié !','Le code de sauvegarde est dans ton presse-papiers.');
+}
+
+function downloadExport(){
+  const data=JSON.stringify(state, null, 2);
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`bloxusquest_save_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadFromFile(){
+  document.getElementById('fileInput').click();
+}
+
+function readFile(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('importData').value=e.target.result;
+    notify('📂 Fichier chargé','Clique sur "Importer & Charger" pour appliquer.');
+  };
+  reader.readAsText(file);
+  event.target.value=''; // reset
+}
+
+function doImport(){
+  const raw=document.getElementById('importData').value.trim();
+  if(!raw){notify('⚠️ Erreur','Aucune donnée à importer.'); return;}
+  try{
+    const parsed=JSON.parse(raw);
+    // Validate minimal structure
+    if(typeof parsed!=='object'||parsed===null||typeof parsed.ch==='undefined'){
+      throw new Error('Structure invalide');
+    }
+    const d=defaultState();
+    state={...d,...parsed,ch:parsed.ch||{}};
+    sessNum=state.sessNum||1;
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+    closeModal();
+    _lastLevel=0;
+    renderAll();
+    checkAch();
+    notify('✅ Importé !','Ta progression a été restaurée avec succès.');
+  }catch(err){
+    notify('❌ Erreur','Sauvegarde invalide ou corrompue.');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// RESET
+// ══════════════════════════════════════════════════════
+
+function openConfirm(){
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+function closeConfirm(){
+  document.getElementById('confirmModal').classList.remove('active');
+}
+
+function doReset(){
+  state=defaultState();
+  sessNum=1;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  closeConfirm();
+  _lastLevel=0;
+  renderAll();
+  notify('🗑 Réinitialisé','Toute la progression a été effacée.');
+}
+
+// Close modals on overlay click
+document.getElementById('importExportModal').addEventListener('click',e=>{
+  if(e.target===e.currentTarget)closeModal();
+});
+document.getElementById('confirmModal').addEventListener('click',e=>{
+  if(e.target===e.currentTarget)closeConfirm();
+});
+
+// ══════════════════════════════════════════════════════
 // STARFIELD
 // ══════════════════════════════════════════════════════
 
@@ -920,7 +1288,6 @@ function initStarfield(){
     r:Math.random()*1.4+0.2, o:Math.random()*.6+.1,
     pulse:Math.random()*Math.PI*2,
   }));
-  // Shooting stars
   let shootTimer=0;
   const shooting=[];
   function draw(){
@@ -931,7 +1298,6 @@ function initStarfield(){
       ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
       ctx.fillStyle=`rgba(200,185,255,${s.o})`; ctx.fill();
     });
-    // Shooting stars
     shootTimer++;
     if(shootTimer>200){shootTimer=0; shooting.push({x:Math.random()*cv.width,y:Math.random()*cv.height*.5,len:0,speed:Math.random()*8+6,angle:Math.PI/6+Math.random()*.3,life:0})}
     shooting.forEach((ss,i)=>{
@@ -953,7 +1319,7 @@ function initStarfield(){
 }
 
 // ══════════════════════════════════════════════════════
-// RENDER ALL
+// RENDER ALL (full rebuild — used on init and reset/import)
 // ══════════════════════════════════════════════════════
 
 function renderAll(){
