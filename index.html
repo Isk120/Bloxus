@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,6 +26,39 @@
   --shadow-gold:rgba(255,215,0,0.25);
   --shadow-arcane:rgba(155,89,182,0.3);
 }
+
+/* ── PARCHMENT / LIGHT THEME ── */
+[data-theme="light"] {
+  --bg-darkest:#f2e6c0;
+  --bg-dark:#ead8a8;
+  --bg-card:#f7f0d8;
+  --bg-card2:#ede4c4;
+  --gold:#8a5c00;
+  --gold-dim:#6a4200;
+  --border-gold:#c09020;
+  --border-bright:#d0a010;
+  --ember:#c04010;
+  --arcane:#6a2888;
+  --arcane-bright:#8a48a8;
+  --steel:#1a6aaa;
+  --emerald:#006844;
+  --text-prim:#1a0c04;
+  --text-sec:#4a2c10;
+  --text-dim:#8a6840;
+  --shadow-gold:rgba(140,90,0,0.3);
+  --shadow-arcane:rgba(100,40,130,0.3);
+}
+[data-theme="light"] body { background:var(--bg-darkest); }
+[data-theme="light"] #starfield { opacity:0.04; filter:sepia(1) hue-rotate(20deg); }
+[data-theme="light"] .xp-bar-fill { background:linear-gradient(90deg,#5a1080,#9a6000,#c09000); }
+[data-theme="light"] .pomo-stat,.boss-card,.quest-item,.ch-note-input,.modal-textarea { background:var(--bg-dark) !important; }
+[data-theme="light"] .card { background:var(--bg-card); }
+[data-theme="light"] .header { background:linear-gradient(180deg,#e8d898,#decca8); }
+[data-theme="light"] .card-head { background:linear-gradient(180deg,#e0cc88,var(--bg-card)); }
+[data-theme="light"] .break-ov { background:rgba(200,180,100,.92); }
+[data-theme="light"] .notif { background:linear-gradient(135deg,#f8e890,#f0d860); }
+[data-theme="light"] .theme-icon::before { content:'☀️'; }
+
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
@@ -34,13 +67,13 @@ body{
   font-family:'Crimson Text',serif;
   min-height:100vh;
   overflow-x:hidden;
+  transition:background .4s, color .4s;
 }
 #starfield{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.5}
 
-/* ─────────────── APP WRAP ─────────────── */
 .app{position:relative;z-index:1;max-width:1480px;margin:0 auto;padding:14px;display:flex;flex-direction:column;gap:14px}
 
-/* ─────────────── TOP HEADER ─────────────── */
+/* ── HEADER ── */
 .header{
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
   padding:14px 24px;
@@ -48,6 +81,7 @@ body{
   border:1px solid var(--border-bright);
   border-radius:3px;
   position:relative;overflow:hidden;
+  transition:background .4s;
 }
 .header::before,.header::after{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .header::before{top:0}.header::after{bottom:0}
@@ -65,20 +99,13 @@ body{
 .char-info{min-width:0}
 .char-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);font-weight:600;letter-spacing:.5px}
 .char-level{font-size:11px;color:var(--text-sec);margin-bottom:5px}
-.xp-bar-wrap{
-  width:190px;height:9px;
-  background:#14142a;border:1px solid var(--border-gold);border-radius:4px;overflow:hidden;position:relative;
-}
+.xp-bar-wrap{width:190px;height:9px;background:#14142a;border:1px solid var(--border-gold);border-radius:4px;overflow:hidden;position:relative}
 .xp-bar-fill{
   height:100%;
   background:linear-gradient(90deg,#7d2b9e,#d4a017,#ffd700);
   border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1);position:relative;
 }
-.xp-bar-fill::after{
-  content:'';position:absolute;top:0;right:0;bottom:0;width:30px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5));
-  animation:shimmer 1.8s infinite;
-}
+.xp-bar-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:30px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5));animation:shimmer 1.8s infinite}
 @keyframes shimmer{0%,100%{opacity:0}50%{opacity:1}}
 .xp-text{font-size:10px;color:var(--text-sec);margin-top:3px}
 
@@ -89,46 +116,28 @@ body{
 .global-stat{font-family:'Cinzel',serif;font-size:11px;color:var(--text-sec)}
 
 .streak-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.streak-pill{
-  display:flex;align-items:center;gap:8px;
-  background:#1a0800;border:1px solid var(--ember);border-radius:20px;padding:7px 16px;
-  box-shadow:0 0 14px rgba(255,107,53,.2);
-}
+.streak-pill{display:flex;align-items:center;gap:8px;background:#1a0800;border:1px solid var(--ember);border-radius:20px;padding:7px 16px;box-shadow:0 0 14px rgba(255,107,53,.2)}
 .streak-fire{font-size:20px;animation:flicker .45s infinite alternate}
 @keyframes flicker{0%{transform:scale(1) rotate(-4deg);filter:brightness(1)}100%{transform:scale(1.12) rotate(4deg);filter:brightness(1.4)}}
 .streak-num{font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:var(--ember)}
 .streak-lbl{font-size:9px;color:rgba(255,107,53,.6);letter-spacing:1px;text-transform:uppercase}
 .last-study{font-size:10px;color:var(--text-dim)}
-
-/* Streak danger warning */
 .streak-danger{font-size:9px;color:var(--ember);letter-spacing:.5px;animation:pulse-warn 1.2s infinite alternate}
 @keyframes pulse-warn{0%{opacity:.5}100%{opacity:1}}
 
-/* ─────────────── MAIN LAYOUT ─────────────── */
+/* ── MAIN LAYOUT ── */
 .main{display:grid;grid-template-columns:290px 1fr 300px;gap:14px;align-items:start}
 
-/* ─────────────── CARDS ─────────────── */
-.card{
-  background:var(--bg-card);
-  border:1px solid var(--border-gold);
-  border-radius:3px;overflow:hidden;position:relative;
-}
+/* ── CARDS ── */
+.card{background:var(--bg-card);border:1px solid var(--border-gold);border-radius:3px;overflow:hidden;position:relative;transition:background .4s}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-bright),transparent)}
-.card-head{
-  display:flex;align-items:center;gap:8px;padding:11px 15px;
-  background:linear-gradient(180deg,#16163a 0%,var(--bg-card) 100%);
-  border-bottom:1px solid var(--border-gold);
-}
+.card-head{display:flex;align-items:center;gap:8px;padding:11px 15px;background:linear-gradient(180deg,#16163a 0%,var(--bg-card) 100%);border-bottom:1px solid var(--border-gold);transition:background .4s}
 .card-title{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;flex:1}
 .card-body{padding:14px}
 
-/* ─────────────── BOSS COUNTDOWNS ─────────────── */
+/* ── BOSS ── */
 .boss-list{display:flex;flex-direction:column;gap:10px}
-.boss-card{
-  background:var(--bg-dark);border-radius:3px;padding:12px 13px;
-  border-left:3px solid;position:relative;overflow:hidden;
-  transition:background .2s;cursor:default;
-}
+.boss-card{background:var(--bg-dark);border-radius:3px;padding:12px 13px;border-left:3px solid;position:relative;overflow:hidden;transition:background .2s;cursor:default}
 .boss-card:hover{background:#131326}
 .boss-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
 .boss-name{font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.5px}
@@ -142,37 +151,36 @@ body{
 .boss-prog-fill{height:100%;border-radius:2px;transition:width .6s ease}
 .boss-pct{font-size:8px;color:var(--text-dim);margin-top:3px;text-align:right;font-family:'Cinzel',serif}
 
-/* ─────────────── POMODORO ─────────────── */
+/* ── CHART CARD ── */
+.chart-wrap{padding:4px 0}
+.chart-label-row{display:flex;justify-content:space-between;margin-top:8px;padding:0 2px}
+.chart-day-lbl{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);text-align:center;flex:1}
+.chart-bar-wrap{display:flex;align-items:flex-end;gap:4px;height:80px;padding:0 2px}
+.chart-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%}
+.chart-bar{width:100%;border-radius:2px 2px 0 0;min-height:2px;transition:height .5s cubic-bezier(.4,0,.2,1),opacity .2s;cursor:default;position:relative}
+.chart-bar:hover{opacity:.8}
+.chart-val{font-family:'Cinzel',serif;font-size:8px;color:var(--text-dim);line-height:1}
+.chart-empty{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);text-align:center;padding:20px 0;font-style:italic}
+
+/* ── POMODORO ── */
 .pomo-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
 .pomo-mode-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.mode-pill{
-  font-family:'Cinzel',serif;font-size:10px;padding:5px 14px;border-radius:12px;
-  cursor:pointer;border:1px solid var(--border-gold);color:var(--text-dim);background:transparent;transition:all .2s;
-}
+.mode-pill{font-family:'Cinzel',serif;font-size:10px;padding:5px 14px;border-radius:12px;cursor:pointer;border:1px solid var(--border-gold);color:var(--text-dim);background:transparent;transition:all .2s}
 .mode-pill.active{background:var(--bg-card2);color:var(--gold);border-color:var(--gold);box-shadow:0 0 10px var(--shadow-gold)}
 .pomo-ring{position:relative;width:210px;height:210px;flex-shrink:0}
 .pomo-ring svg{transform:rotate(-90deg);width:210px;height:210px}
 .ring-bg{fill:none;stroke:#14142a;stroke-width:9}
 .ring-prog{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .4s}
-.pomo-inner{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  text-align:center;pointer-events:none;
-}
+.pomo-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
 .pomo-time{font-family:'Cinzel',serif;font-size:38px;font-weight:900;letter-spacing:2px;line-height:1}
 .pomo-lbl{font-size:10px;color:var(--text-sec);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
 .pomo-sess{font-size:10px;color:var(--text-dim);margin-top:2px}
 .pomo-btns{display:flex;gap:10px}
-
-/* Break duration pills */
 .break-dur-pills{display:flex;gap:6px;align-items:center}
 .break-dur-lbl{font-family:'Cinzel',serif;font-size:9px;color:var(--text-dim);letter-spacing:1px}
 .dur-pill{font-family:'Cinzel',serif;font-size:9px;padding:3px 10px;border-radius:10px;cursor:pointer;border:1px solid var(--border-gold);color:var(--text-dim);background:transparent;transition:all .2s}
 .dur-pill.active{background:var(--bg-card2);color:var(--emerald);border-color:var(--emerald)}
-
-.btn{
-  font-family:'Cinzel',serif;font-size:11px;padding:9px 20px;border-radius:3px;cursor:pointer;
-  border:1px solid;transition:all .2s;letter-spacing:.5px;font-weight:600;
-}
+.btn{font-family:'Cinzel',serif;font-size:11px;padding:9px 20px;border-radius:3px;cursor:pointer;border:1px solid;transition:all .2s;letter-spacing:.5px;font-weight:600}
 .btn-gold{background:linear-gradient(180deg,#2d1c00,#1a0f00);border-color:var(--gold);color:var(--gold)}
 .btn-gold:hover{background:linear-gradient(180deg,#3d2800,#281600);box-shadow:0 0 14px var(--shadow-gold)}
 .btn-ghost{background:linear-gradient(180deg,#16163a,var(--bg-card));border-color:var(--border-gold);color:var(--text-sec)}
@@ -181,21 +189,18 @@ body{
 .btn-danger:hover{background:linear-gradient(180deg,#3a0f00,#280800);box-shadow:0 0 10px rgba(192,57,43,.3)}
 .btn-emerald{background:linear-gradient(180deg,#00200f,#001508);border-color:var(--emerald);color:var(--emerald)}
 .btn-emerald:hover{background:linear-gradient(180deg,#003018,#002010);box-shadow:0 0 10px rgba(0,200,150,.25)}
-
+.btn-arcane{background:linear-gradient(180deg,#1a0a28,#110620);border-color:var(--arcane);color:var(--arcane-bright)}
+.btn-arcane:hover{background:linear-gradient(180deg,#220c38,#180a2c);box-shadow:0 0 10px var(--shadow-arcane)}
 .pomo-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
-.pomo-stat{
-  text-align:center;background:var(--bg-dark);border:1px solid var(--border-gold);border-radius:3px;padding:9px 4px;
-}
+.pomo-stat{text-align:center;background:var(--bg-dark);border:1px solid var(--border-gold);border-radius:3px;padding:9px 4px}
 .pomo-stat-val{font-family:'Cinzel',serif;font-size:20px;font-weight:900;color:var(--gold);display:block}
 .pomo-stat-lbl{font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.shortcut-hint{font-size:9px;color:var(--text-dim);letter-spacing:.5px;opacity:.6}
 
-/* ─────────────── QUEST LOG ─────────────── */
+/* ── QUEST LOG ── */
 .quest-list{display:flex;flex-direction:column;gap:10px}
 .quest-item{background:var(--bg-dark);border-radius:3px;overflow:hidden;border:1px solid var(--border-gold)}
-.quest-header{
-  display:flex;align-items:center;gap:10px;padding:11px 13px;
-  cursor:pointer;transition:background .2s;user-select:none;
-}
+.quest-header{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer;transition:background .2s;user-select:none}
 .quest-header:hover{background:var(--bg-card2)}
 .q-icon{font-size:22px;flex-shrink:0}
 .q-info{flex:1;min-width:0}
@@ -206,34 +211,38 @@ body{
 .q-bar{height:3px;background:#14142a;border-radius:2px;overflow:hidden}
 .q-bar-fill{height:100%;border-radius:2px;transition:width .5s ease}
 .q-bar-lbl{font-size:8px;color:var(--text-dim);text-align:right;margin-top:2px}
-.chapter-list{
-  padding:8px 13px 13px;display:none;
-  border-top:1px solid #1a1a30;flex-direction:column;gap:3px;max-height:280px;overflow-y:auto;
-}
+.chapter-list{padding:8px 13px 13px;display:none;border-top:1px solid #1a1a30;flex-direction:column;gap:1px;max-height:300px;overflow-y:auto}
 .chapter-list.open{display:flex}
 .chapter-list::-webkit-scrollbar{width:3px}
 .chapter-list::-webkit-scrollbar-track{background:var(--bg-dark)}
 .chapter-list::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:2px}
-.ch-item{
-  display:flex;align-items:flex-start;gap:8px;padding:5px 6px;border-radius:3px;cursor:pointer;transition:background .15s;
-}
+
+/* Chapter item + notes */
+.ch-row{display:flex;flex-direction:column}
+.ch-item{display:flex;align-items:flex-start;gap:8px;padding:5px 6px;border-radius:3px;cursor:pointer;transition:background .15s}
 .ch-item:hover{background:var(--bg-card2)}
-.ch-check{
-  width:15px;height:15px;border-radius:2px;border:1px solid var(--border-gold);background:var(--bg-dark);
-  flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;
-  transition:all .25s;margin-top:1px;
-}
+.ch-check{width:15px;height:15px;border-radius:2px;border:1px solid var(--border-gold);background:var(--bg-dark);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .25s;margin-top:1px}
 .ch-item.done .ch-check{background:var(--arcane);border-color:var(--arcane-bright);color:#fff}
 .ch-item.done .ch-text{text-decoration:line-through;color:var(--text-dim);opacity:.55}
 .ch-text{font-size:12px;color:var(--text-prim);line-height:1.4;flex:1}
 .ch-xp{font-size:9px;color:var(--text-dim);flex-shrink:0;margin-top:2px}
-
-/* ─────────────── ACHIEVEMENTS ─────────────── */
-.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.ach{
-  background:var(--bg-dark);border:1px solid var(--border-gold);border-radius:3px;
-  padding:10px 5px;text-align:center;position:relative;transition:all .3s;cursor:default;
+.ch-note-btn{background:none;border:none;cursor:pointer;font-size:11px;color:var(--text-dim);padding:1px 4px;transition:color .2s;flex-shrink:0;margin-top:1px;line-height:1}
+.ch-note-btn:hover{color:var(--arcane-bright)}
+.ch-note-btn.has-note{color:var(--arcane-bright)}
+.ch-note-area{display:none;padding:0 6px 6px 29px}
+.ch-note-area.open{display:block}
+.ch-note-input{
+  width:100%;background:#0a0a18;border:1px solid var(--border-gold);
+  border-radius:3px;color:var(--text-prim);font-family:'Crimson Text',serif;
+  font-size:12px;padding:7px 10px;resize:none;min-height:48px;
+  outline:none;transition:border-color .2s;line-height:1.4;
 }
+.ch-note-input:focus{border-color:var(--arcane-bright)}
+.ch-note-placeholder{font-size:10px;color:var(--text-dim);font-style:italic;padding:4px 0 2px 4px}
+
+/* ── ACHIEVEMENTS ── */
+.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.ach{background:var(--bg-dark);border:1px solid var(--border-gold);border-radius:3px;padding:10px 5px;text-align:center;position:relative;transition:all .3s;cursor:default}
 .ach.unlocked{border-color:var(--gold);background:#1a1400;box-shadow:0 0 12px rgba(255,215,0,.15)}
 .ach.locked{opacity:.35;filter:grayscale(.9)}
 .ach-icon{font-size:24px;display:block;margin-bottom:4px}
@@ -242,16 +251,14 @@ body{
 .ach-tip{
   position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
   background:#0a0a20;border:1px solid var(--border-bright);padding:6px 10px;border-radius:3px;
-  font-size:10px;color:var(--text-prim);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;z-index:200;
-  /* Fix mobile overflow */
-  max-width:min(200px, 80vw);white-space:normal;text-align:left;
+  font-size:10px;color:var(--text-prim);pointer-events:none;opacity:0;transition:opacity .2s;z-index:200;
+  max-width:min(200px,80vw);white-space:normal;text-align:left;
 }
-/* Keep tooltip inside screen */
 .ach:nth-child(3n) .ach-tip{left:auto;right:0;transform:none}
 .ach:nth-child(3n-2) .ach-tip{left:0;transform:none}
 .ach:hover .ach-tip{opacity:1}
 
-/* ─────────────── NOTIFICATIONS ─────────────── */
+/* ── NOTIFICATIONS ── */
 .notif{
   position:fixed;top:80px;right:20px;
   background:linear-gradient(135deg,#1a1a00,#2a2000);
@@ -265,7 +272,7 @@ body{
 .notif-title{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);font-weight:600;margin-bottom:3px}
 .notif-body{font-size:12px;color:var(--text-sec)}
 
-/* ─────────────── XP POPUP ─────────────── */
+/* ── XP POPUP ── */
 .xp-popup{
   position:fixed;pointer-events:none;font-family:'Cinzel',serif;font-size:16px;font-weight:900;
   color:var(--gold);text-shadow:0 0 12px var(--shadow-gold);z-index:999;
@@ -273,12 +280,8 @@ body{
 }
 @keyframes xpFloat{0%{transform:translateY(0) scale(1);opacity:1}60%{transform:translateY(-50px) scale(1.15);opacity:1}100%{transform:translateY(-80px) scale(.9);opacity:0}}
 
-/* ─────────────── BREAK OVERLAY ─────────────── */
-.break-ov{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,15,5,.92);z-index:1000;
-  align-items:center;justify-content:center;flex-direction:column;gap:16px;
-}
+/* ── BREAK OVERLAY ── */
+.break-ov{display:none;position:fixed;inset:0;background:rgba(0,15,5,.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 .break-ov.active{display:flex}
 .break-em{font-size:64px;animation:breathe 3s infinite}
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
@@ -286,80 +289,84 @@ body{
 .break-sub{font-family:'Cinzel',serif;font-size:20px;color:var(--text-prim);letter-spacing:4px}
 .break-hint{font-size:14px;color:var(--text-sec);letter-spacing:1px}
 
-/* ─────────────── LEVEL UP OVERLAY ─────────────── */
-.lvlup-ov{
-  display:none;position:fixed;inset:0;background:rgba(60,20,0,.85);z-index:1002;
-  align-items:center;justify-content:center;flex-direction:column;gap:14px;
-}
+/* ── LEVEL UP OVERLAY ── */
+.lvlup-ov{display:none;position:fixed;inset:0;background:rgba(60,20,0,.85);z-index:1002;align-items:center;justify-content:center;flex-direction:column;gap:14px}
 .lvlup-ov.active{display:flex;animation:flashIn .4s ease}
 @keyframes flashIn{0%{opacity:0}50%{opacity:1}100%{opacity:1}}
-.lvlup-big{
-  font-family:'Cinzel Decorative',cursive;font-size:36px;color:var(--gold);
-  text-shadow:0 0 40px var(--shadow-gold);text-align:center;letter-spacing:3px;
-  white-space:pre-line; /* Fix \n display */
-}
+.lvlup-big{font-family:'Cinzel Decorative',cursive;font-size:36px;color:var(--gold);text-shadow:0 0 40px var(--shadow-gold);text-align:center;letter-spacing:3px;white-space:pre-line}
 .lvlup-em{font-size:80px;animation:spin 1s ease forwards}
 @keyframes spin{0%{transform:rotate(0) scale(0);opacity:0}50%{transform:rotate(360deg) scale(1.2);opacity:1}100%{transform:rotate(360deg) scale(1);opacity:1}}
 
-/* ─────────────── IMPORT/EXPORT MODAL ─────────────── */
-.modal-ov{
-  display:none;position:fixed;inset:0;background:rgba(0,0,10,.88);z-index:1003;
-  align-items:center;justify-content:center;padding:20px;
-}
+/* ── GENERIC MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,10,.88);z-index:1003;align-items:center;justify-content:center;padding:20px}
 .modal-ov.active{display:flex}
-.modal-box{
-  background:var(--bg-card);border:1px solid var(--border-bright);border-radius:4px;
-  max-width:520px;width:100%;position:relative;overflow:hidden;
-}
+.modal-box{background:var(--bg-card);border:1px solid var(--border-bright);border-radius:4px;max-width:520px;width:100%;position:relative;overflow:hidden;max-height:90vh;display:flex;flex-direction:column}
 .modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.modal-head{
-  padding:16px 20px;display:flex;align-items:center;gap:10px;
-  background:linear-gradient(180deg,#16163a,var(--bg-card));
-  border-bottom:1px solid var(--border-gold);
-}
+.modal-head{padding:16px 20px;display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#16163a,var(--bg-card));border-bottom:1px solid var(--border-gold);flex-shrink:0}
 .modal-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:1px;flex:1}
 .modal-close{background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:0 4px;transition:color .2s}
 .modal-close:hover{color:var(--text-prim)}
-.modal-body{padding:20px;display:flex;flex-direction:column;gap:14px}
+.modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
 .modal-section{display:flex;flex-direction:column;gap:8px}
 .modal-section-title{font-family:'Cinzel',serif;font-size:10px;color:var(--text-sec);letter-spacing:1.5px;text-transform:uppercase}
-.modal-textarea{
-  width:100%;height:100px;background:#0a0a18;border:1px solid var(--border-gold);border-radius:3px;
-  color:var(--text-prim);font-family:monospace;font-size:11px;padding:10px;resize:vertical;
-  outline:none;transition:border-color .2s;
-}
+.modal-textarea{width:100%;height:100px;background:#0a0a18;border:1px solid var(--border-gold);border-radius:3px;color:var(--text-prim);font-family:monospace;font-size:11px;padding:10px;resize:vertical;outline:none;transition:border-color .2s}
 .modal-textarea:focus{border-color:var(--border-bright)}
 .modal-row{display:flex;gap:8px;flex-wrap:wrap}
 .modal-info{font-size:11px;color:var(--text-dim);font-style:italic}
 
-/* ─────────────── CONFIRM MODAL ─────────────── */
-.confirm-ov{
-  display:none;position:fixed;inset:0;background:rgba(0,0,10,.88);z-index:1004;
-  align-items:center;justify-content:center;padding:20px;
-}
+/* ── SESSION HISTORY MODAL ── */
+.sess-scroll{overflow-y:auto;max-height:350px}
+.sess-scroll::-webkit-scrollbar{width:4px}
+.sess-scroll::-webkit-scrollbar-track{background:var(--bg-dark)}
+.sess-scroll::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:2px}
+.sess-table{width:100%;border-collapse:collapse;font-size:12px}
+.sess-table th{font-family:'Cinzel',serif;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;padding:6px 8px;border-bottom:1px solid var(--border-gold);text-align:left;position:sticky;top:0;background:var(--bg-card);z-index:1}
+.sess-table td{padding:7px 8px;color:var(--text-prim);border-bottom:1px solid #1a1a30}
+.sess-table tr:last-child td{border-bottom:none}
+.sess-table tr:hover td{background:var(--bg-card2)}
+.sess-empty{text-align:center;color:var(--text-dim);font-style:italic;padding:24px;font-size:12px}
+.sess-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sess-sum-stat{text-align:center;background:var(--bg-dark);border:1px solid var(--border-gold);border-radius:3px;padding:10px 6px}
+.sess-sum-val{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);display:block}
+.sess-sum-lbl{font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* ── NOTIFICATIONS SETTINGS ── */
+.notif-setup{display:flex;flex-direction:column;gap:10px}
+.notif-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.notif-desc{font-size:12px;color:var(--text-sec);line-height:1.5}
+.time-input{background:var(--bg-darkest);border:1px solid var(--border-gold);border-radius:3px;color:var(--text-prim);font-family:'Cinzel',serif;font-size:12px;padding:6px 10px;outline:none;transition:border-color .2s;width:120px}
+.time-input:focus{border-color:var(--border-bright)}
+[data-theme="light"] .time-input{color:var(--text-prim);background:var(--bg-dark)}
+.perm-status{font-family:'Cinzel',serif;font-size:10px;padding:4px 10px;border-radius:9px;background:var(--bg-dark);border:1px solid var(--border-gold);color:var(--text-dim)}
+.perm-status.granted{border-color:var(--emerald);color:var(--emerald)}
+.perm-status.denied{border-color:#c0392b;color:#e74c3c}
+
+/* ── CONFIRM MODAL ── */
+.confirm-ov{display:none;position:fixed;inset:0;background:rgba(0,0,10,.88);z-index:1004;align-items:center;justify-content:center;padding:20px}
 .confirm-ov.active{display:flex}
-.confirm-box{
-  background:var(--bg-card);border:1px solid #c0392b;border-radius:4px;
-  max-width:360px;width:100%;padding:24px;text-align:center;
-  position:relative;overflow:hidden;
-}
+.confirm-box{background:var(--bg-card);border:1px solid #c0392b;border-radius:4px;max-width:360px;width:100%;padding:24px;text-align:center;position:relative;overflow:hidden}
 .confirm-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#c0392b,transparent)}
 .confirm-em{font-size:40px;margin-bottom:12px}
 .confirm-title{font-family:'Cinzel',serif;font-size:14px;color:#e74c3c;margin-bottom:8px;font-weight:600}
 .confirm-desc{font-size:13px;color:var(--text-sec);margin-bottom:18px;line-height:1.5}
 .confirm-row{display:flex;gap:10px;justify-content:center}
 
-/* ─────────────── BOTTOM TOOLBAR ─────────────── */
-.toolbar{
-  display:flex;align-items:center;justify-content:space-between;padding:10px 16px;
-  background:linear-gradient(180deg,#0c0c20,#080814);
-  border:1px solid var(--border-gold);border-radius:3px;gap:10px;flex-wrap:wrap;
-}
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:linear-gradient(180deg,#0c0c20,#080814);border:1px solid var(--border-gold);border-radius:3px;gap:10px;flex-wrap:wrap}
 .toolbar-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .toolbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .toolbar-info{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:.5px}
+.theme-toggle{font-family:'Cinzel',serif;font-size:10px;padding:6px 12px;border-radius:3px;cursor:pointer;border:1px solid var(--border-gold);color:var(--text-sec);background:transparent;transition:all .2s;display:flex;align-items:center;gap:5px}
+.theme-toggle:hover{border-color:var(--border-bright);color:var(--text-prim)}
+.sound-toggle{font-family:'Cinzel',serif;font-size:10px;padding:6px 12px;border-radius:3px;cursor:pointer;border:1px solid var(--border-gold);color:var(--text-sec);background:transparent;transition:all .2s}
+.sound-toggle:hover{border-color:var(--border-bright);color:var(--text-prim)}
+.sound-toggle.on{border-color:var(--emerald);color:var(--emerald)}
 
-/* ─────────────── RESPONSIVE ─────────────── */
+/* ── PARTICLES ── */
+.particle{position:fixed;pointer-events:none;border-radius:50%;z-index:999;animation:particle-float 1.2s ease forwards}
+@keyframes particle-float{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+
+/* ── RESPONSIVE ── */
 @media(max-width:1100px){
   .main{grid-template-columns:1fr 1fr}
   .main>div:last-child{grid-column:1/-1}
@@ -371,13 +378,6 @@ body{
   .streak-wrap{align-items:center}
   .xp-bar-wrap{width:100%;max-width:220px}
 }
-
-/* ─────────────── PARTICLES ─────────────── */
-.particle{
-  position:fixed;pointer-events:none;border-radius:50%;z-index:999;
-  animation:particle-float 1.2s ease forwards;
-}
-@keyframes particle-float{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
 </style>
 </head>
 <body>
@@ -406,12 +406,12 @@ body{
     <div class="modal-head">
       <span>📦</span>
       <span class="modal-title">Importer / Exporter la Sauvegarde</span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" onclick="closeModal('importExportModal')">✕</button>
     </div>
     <div class="modal-body">
       <div class="modal-section">
         <div class="modal-section-title">📤 Exporter</div>
-        <p class="modal-info">Copie ce code pour sauvegarder ta progression ailleurs ou la partager.</p>
+        <p class="modal-info">Copie ce code pour sauvegarder ta progression.</p>
         <textarea class="modal-textarea" id="exportData" readonly onclick="this.select()"></textarea>
         <div class="modal-row">
           <button class="btn btn-gold" onclick="copyExport()">📋 Copier</button>
@@ -420,13 +420,67 @@ body{
       </div>
       <div class="modal-section" style="border-top:1px solid var(--border-gold);padding-top:14px">
         <div class="modal-section-title">📥 Importer</div>
-        <p class="modal-info">Colle un code de sauvegarde exporté pour restaurer ta progression.</p>
+        <p class="modal-info">Colle un code exporté pour restaurer ta progression.</p>
         <textarea class="modal-textarea" id="importData" placeholder="Colle ici ton code de sauvegarde…"></textarea>
         <div class="modal-row">
           <button class="btn btn-emerald" onclick="doImport()">⚡ Importer & Charger</button>
-          <button class="btn btn-ghost" onclick="loadFromFile()">📂 Importer depuis fichier</button>
+          <button class="btn btn-ghost" onclick="loadFromFile()">📂 Depuis fichier</button>
         </div>
         <input type="file" id="fileInput" accept=".json" style="display:none" onchange="readFile(event)">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SESSION HISTORY MODAL ── -->
+<div class="modal-ov" id="historyModal">
+  <div class="modal-box" style="max-width:580px">
+    <div class="modal-head">
+      <span>📅</span>
+      <span class="modal-title">Historique des Sessions</span>
+      <button class="modal-close" onclick="closeModal('historyModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="sess-summary" id="sessSummary"></div>
+      <div class="modal-section">
+        <div class="modal-section-title">📋 Sessions récentes</div>
+        <div class="sess-scroll"><table class="sess-table" id="sessTable">
+          <thead><tr>
+            <th>#</th><th>Date</th><th>Durée</th><th>Chapitres ce jour</th>
+          </tr></thead>
+          <tbody id="sessBody"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── NOTIFICATIONS SETTINGS MODAL ── -->
+<div class="modal-ov" id="notifModal">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-head">
+      <span>⏰</span>
+      <span class="modal-title">Rappels d'Étude</span>
+      <button class="modal-close" onclick="closeModal('notifModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="notif-setup">
+        <p class="notif-desc">Reçois une notification browser chaque jour à l'heure choisie pour t'inciter à étudier.</p>
+        <div class="notif-row">
+          <span class="toolbar-info">Autorisation :</span>
+          <span class="perm-status" id="permStatus">Inconnu</span>
+          <button class="btn btn-gold" style="font-size:10px;padding:6px 12px" onclick="requestNotifPerm()">🔔 Autoriser</button>
+        </div>
+        <div class="notif-row">
+          <span class="toolbar-info">Heure du rappel :</span>
+          <input type="time" class="time-input" id="reminderTimeInput" value="09:00">
+        </div>
+        <div class="notif-row">
+          <button class="btn btn-emerald" style="font-size:10px;padding:6px 14px" onclick="saveReminder()">✅ Activer le rappel</button>
+          <button class="btn btn-danger" style="font-size:10px;padding:6px 14px" onclick="disableReminder()">🔕 Désactiver</button>
+        </div>
+        <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim)" id="reminderStatus">Aucun rappel actif</div>
+        <button class="btn btn-arcane" style="font-size:10px;padding:6px 14px" onclick="testNotif()">🧪 Tester une notification</button>
       </div>
     </div>
   </div>
@@ -440,7 +494,7 @@ body{
     <div class="confirm-desc">Cette action effacera <strong>toute ta progression</strong>, tes sessions Pomodoro et tes succès débloqués. Cette action est <strong>irréversible</strong>.</div>
     <div class="confirm-row">
       <button class="btn btn-danger" onclick="doReset()">🗑 Tout effacer</button>
-      <button class="btn btn-ghost" onclick="closeConfirm()">Annuler</button>
+      <button class="btn btn-ghost" onclick="closeModal('confirmModal')">Annuler</button>
     </div>
   </div>
 </div>
@@ -458,14 +512,12 @@ body{
         <div class="xp-text" id="xpTxt">0 / 200 XP</div>
       </div>
     </div>
-
     <div class="logo-block">
       <div class="logo-title">⚔️ BloxusQuest ⚔️</div>
       <div class="logo-sub">ULB · Session de Juin 2026</div>
       <div class="rune-sep">◈ ✦ ◈</div>
       <div class="global-stat" id="globalStat">0 chapitres maîtrisés</div>
     </div>
-
     <div class="streak-wrap">
       <div class="streak-pill">
         <span class="streak-fire">🔥</span>
@@ -480,18 +532,23 @@ body{
   <!-- ══ MAIN GRID ══ -->
   <div class="main">
 
-    <!-- ── LEFT: BOSS COUNTDOWNS ── -->
-    <div style="display:flex;flex-direction:column;gap:14px;">
+    <!-- ── LEFT ── -->
+    <div style="display:flex;flex-direction:column;gap:14px">
       <div class="card">
         <div class="card-head"><span>💀</span><span class="card-title">Boss à Vaincre</span></div>
         <div class="card-body"><div class="boss-list" id="bossList"></div></div>
       </div>
+      <!-- CHART CARD -->
+      <div class="card">
+        <div class="card-head"><span>📊</span><span class="card-title">Progression 7 Jours</span></div>
+        <div class="card-body" style="padding:10px 14px">
+          <div class="chart-wrap" id="chartWrap"></div>
+        </div>
+      </div>
     </div>
 
-    <!-- ── CENTER: POMODORO + QUESTS ── -->
-    <div style="display:flex;flex-direction:column;gap:14px;">
-
-      <!-- POMODORO -->
+    <!-- ── CENTER ── -->
+    <div style="display:flex;flex-direction:column;gap:14px">
       <div class="card">
         <div class="card-head"><span>⏳</span><span class="card-title">Minuteur de Combat</span></div>
         <div class="card-body">
@@ -500,7 +557,6 @@ body{
               <button class="mode-pill active" id="pillWork" onclick="setMode('work')">⚔️ Focus 50m</button>
               <button class="mode-pill" id="pillBreak" onclick="setMode('break')">🌿 Repos</button>
             </div>
-            <!-- Break duration selector (only shown in break mode) -->
             <div class="break-dur-pills" id="breakDurPills" style="display:none">
               <span class="break-dur-lbl">Durée :</span>
               <button class="dur-pill active" id="durPill5" onclick="setBreakDur(5)">5m</button>
@@ -510,10 +566,7 @@ body{
             <div class="pomo-ring">
               <svg viewBox="0 0 210 210">
                 <circle class="ring-bg" cx="105" cy="105" r="92"/>
-                <circle class="ring-prog" id="ringProg" cx="105" cy="105" r="92"
-                  stroke-dasharray="578.05"
-                  stroke-dashoffset="0"
-                  stroke="#ffd700"/>
+                <circle class="ring-prog" id="ringProg" cx="105" cy="105" r="92" stroke-dasharray="578.05" stroke-dashoffset="0" stroke="#ffd700"/>
               </svg>
               <div class="pomo-inner">
                 <div class="pomo-time" id="pomoTime">50:00</div>
@@ -525,6 +578,7 @@ body{
               <button class="btn btn-gold" id="startBtn" onclick="toggleTimer()">▶ LANCER</button>
               <button class="btn btn-ghost" onclick="resetTimer()">↺ RESET</button>
             </div>
+            <div class="shortcut-hint">espace / K pour démarrer • R pour reset</div>
             <div class="pomo-stats">
               <div class="pomo-stat"><span class="pomo-stat-val" id="todaySess">0</span><span class="pomo-stat-lbl">Séances auj.</span></div>
               <div class="pomo-stat"><span class="pomo-stat-val" id="todayMins">0h00</span><span class="pomo-stat-lbl">Temps auj.</span></div>
@@ -533,15 +587,13 @@ body{
           </div>
         </div>
       </div>
-
-      <!-- QUESTS -->
       <div class="card">
         <div class="card-head"><span>📜</span><span class="card-title">Journal de Quêtes</span></div>
         <div class="card-body" style="padding:8px"><div class="quest-list" id="questList"></div></div>
       </div>
     </div>
 
-    <!-- ── RIGHT: ACHIEVEMENTS ── -->
+    <!-- ── RIGHT ── -->
     <div>
       <div class="card">
         <div class="card-head"><span>🏆</span><span class="card-title">Succès</span></div>
@@ -555,10 +607,14 @@ body{
   <div class="toolbar">
     <div class="toolbar-left">
       <span class="toolbar-info">⚙️ Gestion</span>
-      <button class="btn btn-emerald" onclick="openModal()" style="font-size:10px;padding:6px 14px">📦 Importer / Exporter</button>
-      <button class="btn btn-danger" onclick="openConfirm()" style="font-size:10px;padding:6px 14px">🗑 Réinitialiser</button>
+      <button class="btn btn-emerald" onclick="openModal('importExportModal')" style="font-size:10px;padding:6px 14px">📦 Import / Export</button>
+      <button class="btn btn-arcane" onclick="openHistoryModal()" style="font-size:10px;padding:6px 14px">📅 Historique</button>
+      <button class="btn btn-ghost" onclick="openModal('notifModal')" style="font-size:10px;padding:6px 14px">⏰ Rappels</button>
+      <button class="btn btn-danger" onclick="openModal('confirmModal')" style="font-size:10px;padding:6px 14px">🗑 Reset</button>
     </div>
     <div class="toolbar-right">
+      <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Sons</button>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Thème</button>
       <span class="toolbar-info" id="saveStatus">💾 Sauvegarde automatique</span>
     </div>
   </div>
@@ -571,109 +627,70 @@ body{
 // ══════════════════════════════════════════════════════
 
 const EXAMS = [
-  {id:'PHYSF103', boss:'Archimage Physix', dungeon:'Donjon de la Physique',
-   date:new Date('2026-05-26T09:00:00'), color:'#ff6b35', icon:'⚡', xp:50},
-  {id:'INFOF103', boss:'Golem Algorithmix', dungeon:'Forêt des Algorithmes',
-   date:new Date('2026-05-29T09:00:00'), color:'#00c896', icon:'🌲', xp:60},
-  {id:'INFOF105', boss:'Dragon Compilator', dungeon:'Citadelle du C++',
-   date:new Date('2026-06-03T09:00:00'), color:'#4a9eff', icon:'⚙️', xp:55},
-  {id:'MATHF114', boss:'Lich Mathématix', dungeon:"Château de l'Algèbre",
-   date:new Date('2026-06-12T09:00:00'), color:'#ffd700', icon:'🏰', xp:65},
+  {id:'PHYSF103', boss:'Archimage Physix',    dungeon:'Donjon de la Physique',    date:new Date('2026-05-26T09:00:00'), color:'#ff6b35', icon:'⚡', xp:50},
+  {id:'INFOF103', boss:'Golem Algorithmix',   dungeon:'Forêt des Algorithmes',    date:new Date('2026-05-29T09:00:00'), color:'#00c896', icon:'🌲', xp:60},
+  {id:'INFOF105', boss:'Dragon Compilator',   dungeon:'Citadelle du C++',         date:new Date('2026-06-03T09:00:00'), color:'#4a9eff', icon:'⚙️', xp:55},
+  {id:'MATHF114', boss:'Lich Mathématix',     dungeon:"Château de l'Algèbre",     date:new Date('2026-06-12T09:00:00'), color:'#ffd700', icon:'🏰', xp:65},
 ];
 
 const CHAPTERS = {
   PHYSF103:[
-    'Cinématique du point matériel',
-    'Dynamique du point matériel',
-    'Travail et énergie',
-    'La charge électrique et la loi de Coulomb',
-    'Le champ électrique',
-    'Le potentiel électrique',
-    'Courant électrique, résistance et piles',
-    'Circuits avec résistances ohmiques',
-    'Semi-conducteurs et portes logiques',
-    'Appareils de mesures électriques',
-    'Les condensateurs',
-    'Le magnétisme',
-    'Induction électromagnétique et inducteurs',
-    'CA : déphasage, Fresnel, phaseurs, réactance',
-    'CA : impédance, puissance, facteur de qualité',
+    'Cinématique du point matériel','Dynamique du point matériel','Travail et énergie',
+    'La charge électrique et la loi de Coulomb','Le champ électrique','Le potentiel électrique',
+    'Courant électrique, résistance et piles','Circuits avec résistances ohmiques',
+    'Semi-conducteurs et portes logiques','Appareils de mesures électriques','Les condensateurs',
+    'Le magnétisme','Induction électromagnétique et inducteurs',
+    'CA : déphasage, Fresnel, phaseurs, réactance','CA : impédance, puissance, facteur de qualité',
   ],
   INFOF103:[
-    'Les ADTs (Abstract Data Types)',
-    'Récursivité',
-    'Backtracking',
-    'Arbres',
-    'Séquences triées',
-    'Files à priorité (Heaps)',
-    'Ensembles dynamiques et dictionnaires',
-    'Graphes',
-    'Dérécursification',
-    'Tris',
-    'Programmation dynamique',
+    'Les ADTs (Abstract Data Types)','Récursivité','Backtracking','Arbres','Séquences triées',
+    'Files à priorité (Heaps)','Ensembles dynamiques et dictionnaires','Graphes',
+    'Dérécursification','Tris','Programmation dynamique',
   ],
   INFOF105:[
-    'Compilation et exécution en C++',
-    'Expressions et instructions',
-    'Conditions et boucles',
-    "Fonctions simples et découpe d'un programme",
-    'Modes de stockage et portée',
-    'Tableaux et pointeurs',
-    'Pointeurs, références, const, tableaux, fonctions',
-    'POD (Plain Old Data)',
-    'Les ADT en C++',
-    'Compilation et exécution en assembleur 80386',
-    'Instructions arithmétiques (ASM)',
-    'Choix et boucles (ASM)',
+    'Compilation et exécution en C++','Expressions et instructions','Conditions et boucles',
+    "Fonctions simples et découpe d'un programme",'Modes de stockage et portée','Tableaux et pointeurs',
+    'Pointeurs, références, const, tableaux, fonctions','POD (Plain Old Data)','Les ADT en C++',
+    'Compilation et exécution en assembleur 80386','Instructions arithmétiques (ASM)','Choix et boucles (ASM)',
   ],
   MATHF114:[
-    'Équations différentielles',
-    'Matrices et systèmes',
-    'Les espaces Kⁿ',
-    'Corps Commutatifs',
-    'Espaces vectoriels sur un corps',
-    'Parties Génératrices et Parties Libres',
-    'Bases et dimension',
-    'Applications Linéaires',
-    'Noyau et Image',
-    'Applications Linéaires et Matrices',
-    'Applications Linéaires et Opérations',
-    "Matrice inverse et réciproque d'une application",
-    'Valeurs propres et Vecteurs propres',
-    'Distances et Normes',
-    'Produits scalaires',
-    'Isométries',
-    "Éléments d'arithmétique",
-    'Permutations',
+    'Équations différentielles','Matrices et systèmes','Les espaces Kⁿ','Corps Commutatifs',
+    'Espaces vectoriels sur un corps','Parties Génératrices et Parties Libres','Bases et dimension',
+    'Applications Linéaires','Noyau et Image','Applications Linéaires et Matrices',
+    'Applications Linéaires et Opérations',"Matrice inverse et réciproque d'une application",
+    'Valeurs propres et Vecteurs propres','Distances et Normes','Produits scalaires','Isométries',
+    "Éléments d'arithmétique",'Permutations',
   ],
 };
 
 const ACHIEVEMENTS = [
-  {id:'first',    icon:'🌱', name:'Premier Pas',   desc:'Cocher son premier chapitre',        chk:s=>totalDone(s)>=1},
-  {id:'streak3',  icon:'🔥', name:'En Feu',         desc:'Atteindre 3 jours de streak',        chk:s=>s.streak>=3},
-  {id:'streak7',  icon:'⚔️', name:'Guerrier',        desc:"7 jours de streak d'affilée",        chk:s=>s.streak>=7},
-  {id:'phys',     icon:'⚡', name:'Physicien',       desc:'Terminer PHYSF103',                  chk:s=>courseDone(s,'PHYSF103')},
-  {id:'algo',     icon:'🌲', name:'Algorithmiste',   desc:'Terminer INFOF103',                  chk:s=>courseDone(s,'INFOF103')},
-  {id:'ldp',      icon:'💻', name:'Programmeur',     desc:'Terminer INFOF105',                  chk:s=>courseDone(s,'INFOF105')},
-  {id:'math',     icon:'📐', name:'Mathématicien',   desc:'Terminer MATHF114',                  chk:s=>courseDone(s,'MATHF114')},
-  {id:'half',     icon:'🗺️', name:'Demi-chemin',     desc:'Atteindre 50% de complétion',        chk:s=>totalPct(s)>=50},
-  {id:'pomo5',    icon:'⏳', name:'Focalisé',         desc:'Compléter 5 sessions Pomodoro',      chk:s=>s.totalSess>=5},
-  {id:'pomo20',   icon:'🕯️', name:'Moine',            desc:'Compléter 20 sessions Pomodoro',     chk:s=>s.totalSess>=20},
-  {id:'day3ch',   icon:'💨', name:'Speedrunner',      desc:'Cocher 3+ chapitres en un jour',     chk:s=>s.todayCh>=3},
-  {id:'legend',   icon:'👑', name:'Légendaire',       desc:"Tout terminer — Héros de l'ULB !",   chk:s=>totalPct(s)>=100},
+  {id:'first',      icon:'🌱', name:'Premier Pas',     desc:'Cocher son premier chapitre',                   chk:s=>totalDone(s)>=1},
+  {id:'streak3',    icon:'🔥', name:'En Feu',           desc:'Atteindre 3 jours de streak',                   chk:s=>s.streak>=3},
+  {id:'streak7',    icon:'⚔️', name:'Guerrier',          desc:"7 jours de streak d'affilée",                   chk:s=>s.streak>=7},
+  {id:'phys',       icon:'⚡', name:'Physicien',         desc:'Terminer PHYSF103',                             chk:s=>courseDone(s,'PHYSF103')},
+  {id:'algo',       icon:'🌲', name:'Algorithmiste',     desc:'Terminer INFOF103',                             chk:s=>courseDone(s,'INFOF103')},
+  {id:'ldp',        icon:'💻', name:'Programmeur',       desc:'Terminer INFOF105',                             chk:s=>courseDone(s,'INFOF105')},
+  {id:'math',       icon:'📐', name:'Mathématicien',     desc:'Terminer MATHF114',                             chk:s=>courseDone(s,'MATHF114')},
+  {id:'half',       icon:'🗺️', name:'Demi-chemin',       desc:'Atteindre 50% de complétion',                   chk:s=>totalPct(s)>=50},
+  {id:'pomo5',      icon:'⏳', name:'Focalisé',           desc:'Compléter 5 sessions Pomodoro',                 chk:s=>s.totalSess>=5},
+  {id:'pomo20',     icon:'🕯️', name:'Moine',              desc:'Compléter 20 sessions Pomodoro',                chk:s=>s.totalSess>=20},
+  {id:'day3ch',     icon:'💨', name:'Speedrunner',        desc:'Cocher 3+ chapitres en un jour',                chk:s=>s.todayCh>=3},
+  {id:'noter',      icon:'📝', name:'Chroniqueur',        desc:'Écrire des notes sur 5 chapitres',              chk:s=>Object.keys(s.notes||{}).filter(k=>s.notes[k]?.trim()).length>=5},
+  {id:'marathon',   icon:'🏃', name:'Marathonien',        desc:'Accumuler 5h de Focus total',                   chk:s=>(s.totalMins||0)>=300},
+  {id:'legend',     icon:'👑', name:'Légendaire',         desc:"Tout terminer — Héros de l'ULB !",              chk:s=>totalPct(s)>=100},
 ];
 
 const LEVELS = [
-  {min:0,    max:200,  name:'Apprenti',  av:'🧑‍🎓'},
-  {min:200,  max:500,  name:'Novice',    av:'🧙'},
-  {min:500,  max:900,  name:'Aventurier',av:'🗡️'},
-  {min:900,  max:1400, name:'Guerrier',  av:'⚔️'},
-  {min:1400, max:2000, name:'Chevalier', av:'🛡️'},
-  {min:2000, max:2800, name:'Maître',    av:'🔮'},
-  {min:2800, max:99999,name:'Légendaire',av:'👑'},
+  {min:0,    max:200,  name:'Apprenti',    av:'🧑‍🎓'},
+  {min:200,  max:500,  name:'Novice',      av:'🧙'},
+  {min:500,  max:900,  name:'Aventurier',  av:'🗡️'},
+  {min:900,  max:1400, name:'Guerrier',    av:'⚔️'},
+  {min:1400, max:2000, name:'Chevalier',   av:'🛡️'},
+  {min:2000, max:2800, name:'Maître',      av:'🔮'},
+  {min:2800, max:99999,name:'Légendaire',  av:'👑'},
 ];
 
-const CIRCUMFERENCE = 2*Math.PI*92; // 578.05
+const CIRCUMFERENCE = 2*Math.PI*92;
 
 // ══════════════════════════════════════════════════════
 // STATE
@@ -682,15 +699,20 @@ const CIRCUMFERENCE = 2*Math.PI*92; // 578.05
 const STORAGE_KEY = 'bloxusquest_v4';
 
 function defaultState(){
-  return{ch:{},streak:0,lastDate:null,totalSess:0,todaySess:0,
-    todayMins:0,todayDate:null,todayCh:0,unlocked:[],sessNum:1};
+  return {
+    ch:{}, streak:0, lastDate:null, totalSess:0, todaySess:0,
+    todayMins:0, todayDate:null, todayCh:0, unlocked:[], sessNum:1,
+    theme:'dark', soundEnabled:true, notes:{},
+    sessionLog:[], dailyHistory:[],
+    reminderEnabled:false, reminderTime:'09:00',
+    totalMins:0,
+  };
 }
 
 function loadState(){
   try{
     const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
-    const d=defaultState();
-    return{...d,...s,ch:s.ch||{}};
+    return {...defaultState(),...s,ch:s.ch||{},notes:s.notes||{},sessionLog:s.sessionLog||[],dailyHistory:s.dailyHistory||[]};
   }catch{return defaultState();}
 }
 
@@ -700,16 +722,13 @@ function save(){
 }
 
 let state=loadState();
-
-// Sync sessNum from state
-let sessNum = state.sessNum || 1;
+let sessNum=state.sessNum||1;
 
 // Reset daily counters if new day
 (function resetDaily(){
   const today=new Date().toDateString();
   if(state.todayDate!==today){
-    state.todayDate=today; state.todaySess=0;
-    state.todayMins=0; state.todayCh=0; save();
+    state.todayDate=today; state.todaySess=0; state.todayMins=0; state.todayCh=0; save();
   }
 })();
 
@@ -743,12 +762,18 @@ function threatFor(days){
 }
 
 function fmtMins(mins){
-  const h=Math.floor(mins/60), m=mins%60;
-  return h>0 ? `${h}h${String(m).padStart(2,'0')}` : `${m}m`;
+  const h=Math.floor(mins/60),m=mins%60;
+  return h>0?`${h}h${String(m).padStart(2,'0')}`:`${m}m`;
+}
+
+function fmtDate(iso){
+  const d=new Date(iso);
+  return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}) + ' ' +
+         d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
 }
 
 // ══════════════════════════════════════════════════════
-// SAVE STATUS FLASH
+// SAVE STATUS
 // ══════════════════════════════════════════════════════
 
 let saveFlashTimer=null;
@@ -763,6 +788,180 @@ function flashSaveStatus(){
     el.style.color='';
   },2000);
 }
+
+// ══════════════════════════════════════════════════════
+// AUDIO ENGINE (Web Audio API — no external files)
+// ══════════════════════════════════════════════════════
+
+let audioCtx=null;
+
+function getAudioCtx(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq,type,start,duration,gainVal,rampTo){
+  if(!state.soundEnabled) return;
+  try{
+    const ctx=getAudioCtx();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type=type||'sine';
+    osc.frequency.setValueAtTime(freq,ctx.currentTime+start);
+    gain.gain.setValueAtTime(gainVal||0.18,ctx.currentTime+start);
+    if(rampTo!==undefined){
+      gain.gain.exponentialRampToValueAtTime(rampTo+0.001,ctx.currentTime+start+duration);
+    }else{
+      gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+start+duration);
+    }
+    osc.start(ctx.currentTime+start);
+    osc.stop(ctx.currentTime+start+duration+0.05);
+  }catch(e){}
+}
+
+function soundCheck(){
+  // Pleasant ascending arp: E4→G4→B4
+  playTone(330,'sine',0,.12,.18);
+  playTone(392,'sine',.09,.12,.18);
+  playTone(494,'sine',.18,.18,.2);
+}
+
+function soundUncheck(){
+  playTone(330,'sine',0,.08,.12);
+  playTone(220,'sine',.07,.12,.08);
+}
+
+function soundLevelUp(){
+  // Triumphant fanfare
+  [262,330,392,523,659,784].forEach((f,i)=>playTone(f,'triangle',i*.07,.3,.22));
+}
+
+function soundTimerDone(){
+  // Three bells
+  [523,659,784].forEach((f,i)=>playTone(f,'sine',i*.2,.4,.22));
+}
+
+function soundBreakStart(){
+  // Soft descending chime
+  [659,523,392,330].forEach((f,i)=>playTone(f,'sine',i*.15,.35,.15));
+}
+
+function soundAchievement(){
+  // Epic unlock
+  [392,494,587,784].forEach((f,i)=>playTone(f,'triangle',i*.1,.5,.2));
+}
+
+function soundPomoStart(){
+  // Two short beeps
+  playTone(440,'square',0,.06,.12);
+  playTone(550,'square',.1,.06,.12);
+}
+
+// ══════════════════════════════════════════════════════
+// THEME
+// ══════════════════════════════════════════════════════
+
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  const btn=document.getElementById('themeToggle');
+  if(btn) btn.textContent=t==='dark'?'☀️ Parchemin':'🌙 Sombre';
+}
+
+function toggleTheme(){
+  state.theme=(state.theme==='dark')?'light':'dark';
+  applyTheme(state.theme);
+  save();
+}
+
+// ══════════════════════════════════════════════════════
+// SOUND TOGGLE
+// ══════════════════════════════════════════════════════
+
+function applySoundToggle(){
+  const btn=document.getElementById('soundToggle');
+  if(btn){
+    btn.textContent=state.soundEnabled?'🔊 Sons':'🔇 Muet';
+    btn.classList.toggle('on',state.soundEnabled);
+  }
+}
+
+function toggleSound(){
+  state.soundEnabled=!state.soundEnabled;
+  applySoundToggle();
+  save();
+  if(state.soundEnabled) soundCheck();
+}
+
+// ══════════════════════════════════════════════════════
+// BROWSER NOTIFICATIONS
+// ══════════════════════════════════════════════════════
+
+function updatePermStatus(){
+  const el=document.getElementById('permStatus');
+  if(!el)return;
+  const p=('Notification' in window)?Notification.permission:'unsupported';
+  el.className='perm-status';
+  if(p==='granted'){el.textContent='✅ Autorisé';el.classList.add('granted')}
+  else if(p==='denied'){el.textContent='❌ Refusé';el.classList.add('denied')}
+  else{el.textContent='⏳ En attente'}
+}
+
+function requestNotifPerm(){
+  if(!('Notification' in window)){notify('⚠️ Impossible',"Ton navigateur ne supporte pas les notifications."); return;}
+  Notification.requestPermission().then(p=>{
+    updatePermStatus();
+    if(p==='granted') notify('🔔 Notifications','Les notifications sont activées !');
+    else notify('⚠️ Refusé','Active les notifications dans les paramètres du navigateur.');
+  });
+}
+
+function saveReminder(){
+  const t=document.getElementById('reminderTimeInput').value;
+  if(!t){notify('⚠️ Erreur','Choisis une heure.'); return;}
+  state.reminderEnabled=true; state.reminderTime=t; save();
+  updateReminderStatus();
+  notify('⏰ Rappel activé',`Tu seras rappelé chaque jour à ${t}.`);
+}
+
+function disableReminder(){
+  state.reminderEnabled=false; save();
+  updateReminderStatus();
+  notify('🔕 Rappel désactivé','Plus de rappels.');
+}
+
+function updateReminderStatus(){
+  const el=document.getElementById('reminderStatus');
+  if(!el)return;
+  el.textContent=state.reminderEnabled?`⏰ Rappel actif à ${state.reminderTime}`:'Aucun rappel actif';
+  el.style.color=state.reminderEnabled?'var(--emerald)':'var(--text-dim)';
+  const inp=document.getElementById('reminderTimeInput');
+  if(inp && state.reminderTime) inp.value=state.reminderTime;
+}
+
+function testNotif(){
+  if(!('Notification' in window)||Notification.permission!=='granted'){
+    notify('⚠️ Autorisation requise','Autorise d\'abord les notifications.');
+    return;
+  }
+  new Notification('⚔️ BloxusQuest', {
+    body: "C'est l'heure d'étudier, aventurier ! 📚",
+    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">⚔️</text></svg>'
+  });
+}
+
+// Check reminder every minute
+setInterval(()=>{
+  if(!state.reminderEnabled)return;
+  if(Notification.permission!=='granted')return;
+  const now=new Date();
+  const hm=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  if(hm===state.reminderTime){
+    new Notification('⚔️ BloxusQuest — Rappel d\'Étude', {
+      body: `Il est ${hm} — c'est l'heure de vaincre tes boss ! 🎯`,
+    });
+  }
+},60000);
 
 // ══════════════════════════════════════════════════════
 // STREAK
@@ -782,14 +981,10 @@ function renderStreak(){
     const d=new Date(state.lastDate);
     document.getElementById('lastStudy').textContent=`Dernière : ${d.toLocaleDateString('fr-FR')}`;
   }
-  // Streak danger: has streak but hasn't studied today
   const today=new Date().toDateString();
   const warn=document.getElementById('streakWarning');
-  if(state.streak>0 && state.lastDate!==today){
-    warn.style.display='block';
-  }else{
-    warn.style.display='none';
-  }
+  if(state.streak>0 && state.lastDate!==today) warn.style.display='block';
+  else warn.style.display='none';
 }
 
 // ══════════════════════════════════════════════════════
@@ -802,18 +997,13 @@ function renderXP(){
   const xp=getXP(state);
   const lvl=getLevel(xp);
   const pct=Math.min(100,((xp-lvl.min)/(lvl.max-lvl.min))*100);
-
   document.getElementById('xpFill').style.width=pct+'%';
   document.getElementById('xpTxt').textContent=`${xp} / ${lvl.max} XP`;
   document.getElementById('lvlTxt').textContent=`Niveau ${lvl.lv} — ${lvl.name}`;
   document.getElementById('charAv').textContent=lvl.av;
-
   const done=totalDone(state);
   document.getElementById('globalStat').textContent=`${done} / ${totalAll()} chapitres · ${totalPct(state)}%`;
-
-  if(_lastLevel>0 && lvl.lv>_lastLevel){
-    showLevelUp(lvl);
-  }
+  if(_lastLevel>0 && lvl.lv>_lastLevel){showLevelUp(lvl);}
   _lastLevel=lvl.lv;
 }
 
@@ -822,6 +1012,7 @@ function showLevelUp(lvl){
   document.getElementById('lvlupEm').textContent=lvl.av;
   document.getElementById('lvlupText').textContent=`NIVEAU ${lvl.lv} !\n${lvl.name}`;
   ov.classList.add('active');
+  soundLevelUp();
   setTimeout(()=>ov.classList.remove('active'),4000);
 }
 
@@ -909,17 +1100,135 @@ function tickCountdowns(){
     }
     const thr=threatFor(days);
     const thrEl=document.getElementById(`thr_${e.id}`);
-    if(thrEl){thrEl.textContent=thr.txt; thrEl.style.color=thr.c; thrEl.style.borderColor=thr.c}
+    if(thrEl){thrEl.textContent=thr.txt;thrEl.style.color=thr.c;thrEl.style.borderColor=thr.c}
   });
 }
 
 // ══════════════════════════════════════════════════════
-// QUESTS — optimized rendering
+// CHART (7-day progress)
+// ══════════════════════════════════════════════════════
+
+function snapshotToday(){
+  const today=new Date().toDateString();
+  const totalCh=totalDone(state);
+  const totalXP=getXP(state);
+  const existing=state.dailyHistory.find(d=>d.date===today);
+  if(existing){existing.totalCh=totalCh;existing.totalXP=totalXP;}
+  else{
+    state.dailyHistory.push({date:today,totalCh,totalXP,sessions:state.todaySess,mins:state.todayMins});
+    if(state.dailyHistory.length>30)state.dailyHistory.shift();
+  }
+}
+
+function renderChart(){
+  const wrap=document.getElementById('chartWrap');
+  if(!wrap)return;
+
+  // Get last 7 days
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    days.push(d.toDateString());
+  }
+
+  // Build delta chapters per day
+  const history=state.dailyHistory;
+  const dataPoints=days.map((day,idx)=>{
+    const entry=history.find(h=>h.date===day);
+    if(!entry) return {day,ch:0,label:new Date(day).toLocaleDateString('fr-FR',{weekday:'short'})};
+    // Delta = today's total - yesterday's total
+    const prevEntry=idx>0?history.find(h=>h.date===days[idx-1]):null;
+    const prevTotal=prevEntry?prevEntry.totalCh:0;
+    const delta=Math.max(0,entry.totalCh-prevTotal);
+    return {day,ch:delta,label:new Date(day).toLocaleDateString('fr-FR',{weekday:'short'})};
+  });
+
+  const maxCh=Math.max(1,...dataPoints.map(d=>d.ch));
+  const today=new Date().toDateString();
+
+  // Build chart HTML
+  const bars=dataPoints.map(d=>{
+    const heightPct=Math.max(2,Math.round((d.ch/maxCh)*100));
+    const isToday=d.day===today;
+    const color=isToday?'var(--gold)':'var(--arcane-bright)';
+    const opacity=isToday?'1':'0.55';
+    return `<div class="chart-bar-col">
+      <div class="chart-val" style="color:${d.ch>0?color:'var(--text-dim)'}">${d.ch>0?d.ch:''}</div>
+      <div style="flex:1;display:flex;align-items:flex-end;width:100%">
+        <div class="chart-bar" style="background:${color};height:${heightPct}%;opacity:${opacity};width:100%" title="${d.ch} chapitre(s)"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const labels=dataPoints.map(d=>{
+    const isToday=d.day===today;
+    return `<div class="chart-day-lbl" style="${isToday?'color:var(--gold);font-weight:600':''}">${d.label}</div>`;
+  }).join('');
+
+  const totalStudyDays=dataPoints.filter(d=>d.ch>0).length;
+  const totalChWeek=dataPoints.reduce((a,d)=>a+d.ch,0);
+
+  wrap.innerHTML=`
+    <div style="display:flex;align-items:flex-end;gap:4px;height:80px;padding:0 2px">${bars}</div>
+    <div class="chart-label-row">${labels}</div>
+    <div style="display:flex;justify-content:space-between;margin-top:10px;padding:0 2px">
+      <span style="font-family:'Cinzel',serif;font-size:9px;color:var(--text-dim)">${totalChWeek} chap. cette semaine</span>
+      <span style="font-family:'Cinzel',serif;font-size:9px;color:var(--text-dim)">${totalStudyDays}/7 jours actifs</span>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// SESSION LOG
+// ══════════════════════════════════════════════════════
+
+function logSession(sessNumber,durationMins){
+  state.sessionLog.unshift({
+    isoDate:new Date().toISOString(),
+    duration:durationMins,
+    sessNum:sessNumber,
+    dayChapters:state.todayCh,
+  });
+  if(state.sessionLog.length>60)state.sessionLog.pop();
+}
+
+function openHistoryModal(){
+  renderHistoryModal();
+  openModal('historyModal');
+}
+
+function renderHistoryModal(){
+  // Summary stats
+  const sumEl=document.getElementById('sessSummary');
+  if(sumEl){
+    const totalH=Math.floor((state.totalMins||0)/60);
+    const totalM=(state.totalMins||0)%60;
+    sumEl.innerHTML=`
+      <div class="sess-sum-stat"><span class="sess-sum-val">${state.totalSess}</span><span class="sess-sum-lbl">Sessions totales</span></div>
+      <div class="sess-sum-stat"><span class="sess-sum-val">${totalH}h${String(totalM).padStart(2,'0')}</span><span class="sess-sum-lbl">Temps total</span></div>
+      <div class="sess-sum-stat"><span class="sess-sum-val">${state.streak}</span><span class="sess-sum-lbl">Streak actuel</span></div>
+    `;
+  }
+  const body=document.getElementById('sessBody');
+  if(!body)return;
+  if(!state.sessionLog.length){
+    body.innerHTML=`<tr><td colspan="4" class="sess-empty">Aucune session enregistrée — lance ton premier Pomodoro !</td></tr>`;
+    return;
+  }
+  body.innerHTML=state.sessionLog.map((s,i)=>`
+    <tr>
+      <td style="font-family:'Cinzel',serif;color:var(--gold);">#${s.sessNum||'?'}</td>
+      <td>${fmtDate(s.isoDate)}</td>
+      <td>${s.duration||50} min</td>
+      <td style="color:var(--arcane-bright)">${s.dayChapters||0} chap. ce jour</td>
+    </tr>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// QUESTS & NOTES
 // ══════════════════════════════════════════════════════
 
 function renderQuests(){
   const c=document.getElementById('questList');
-  // Remember which quest lists are open
   const openIds=new Set();
   c.querySelectorAll('.chapter-list.open').forEach(el=>openIds.add(el.id));
   c.innerHTML='';
@@ -935,10 +1244,18 @@ function renderQuests(){
     const items=chs.map((ch,i)=>{
       const k=`${e.id}_${i}`;
       const d=state.ch[k];
-      return`<div class="ch-item${d?' done':''}" data-exam="${e.id}" data-idx="${i}">
-        <div class="ch-check">${d?'✓':''}</div>
-        <div class="ch-text">${i+1}. ${ch}</div>
-        <div class="ch-xp">+${e.xp} XP</div>
+      const hasNote=!!(state.notes[k]?.trim());
+      return`<div class="ch-row">
+        <div class="ch-item${d?' done':''}" data-exam="${e.id}" data-idx="${i}">
+          <div class="ch-check">${d?'✓':''}</div>
+          <div class="ch-text">${i+1}. ${ch}</div>
+          <div class="ch-xp">+${e.xp} XP</div>
+          <button class="ch-note-btn${hasNote?' has-note':''}" data-note-key="${k}" title="${hasNote?'Voir note':'Ajouter note'}">📝</button>
+        </div>
+        <div class="ch-note-area" id="note_${k}">
+          <div class="ch-note-placeholder">Note personnelle :</div>
+          <textarea class="ch-note-input" rows="2" data-note-key="${k}" placeholder="Tape ta note ici…">${state.notes[k]||''}</textarea>
+        </div>
       </div>`;
     }).join('');
 
@@ -958,21 +1275,46 @@ function renderQuests(){
         <div class="q-bar-lbl">${done}/${total} (${pct}%)</div>
       </div>
       <div class="chapter-list${isOpen?' open':''}" id="${listId}">${items}</div>`;
-    // Toggle on header click
+
     el.querySelector('.quest-header').addEventListener('click',()=>{
       el.querySelector('.chapter-list').classList.toggle('open');
     });
-    // Chapter toggle on chapter click (event delegation)
+
     el.querySelector('.chapter-list').addEventListener('click',ev=>{
+      // Note button click
+      const noteBtn=ev.target.closest('.ch-note-btn');
+      if(noteBtn){
+        ev.stopPropagation();
+        const key=noteBtn.dataset.noteKey;
+        const area=document.getElementById(`note_${key}`);
+        if(area) area.classList.toggle('open');
+        return;
+      }
+      // Chapter toggle
       const item=ev.target.closest('.ch-item');
       if(!item)return;
-      toggleCh(item.dataset.exam, parseInt(item.dataset.idx), ev);
+      toggleCh(item.dataset.exam,parseInt(item.dataset.idx),ev);
     });
+
+    // Note auto-save on input
+    el.querySelectorAll('.ch-note-input').forEach(ta=>{
+      ta.addEventListener('input',()=>{
+        const key=ta.dataset.noteKey;
+        state.notes[key]=ta.value;
+        // Update note button indicator
+        const btn=el.querySelector(`.ch-note-btn[data-note-key="${key}"]`);
+        if(btn) btn.classList.toggle('has-note',!!(ta.value.trim()));
+        save();
+        checkAch(); // for noter achievement
+      });
+      // Stop click on textarea from propagating to chapter toggle
+      ta.addEventListener('click',ev=>ev.stopPropagation());
+    });
+
     c.appendChild(el);
   });
 }
 
-// Update only changed quest item inline (no full rebuild)
 function patchQuestItem(examId){
   const e=EXAMS.find(x=>x.id===examId);
   const chs=CHAPTERS[examId];
@@ -980,7 +1322,6 @@ function patchQuestItem(examId){
   const total=chs.length;
   const pct=Math.round(done/total*100);
   const xpE=done*e.xp; const xpT=total*e.xp;
-  // Update xp badge, bar, label
   const listEl=document.getElementById(`cl_${examId}`);
   if(!listEl)return;
   const questItem=listEl.closest('.quest-item');
@@ -990,7 +1331,6 @@ function patchQuestItem(examId){
   if(fill)fill.style.width=pct+'%';
   const lbl=questItem.querySelector('.q-bar-lbl');
   if(lbl)lbl.textContent=`${done}/${total} (${pct}%)`;
-  // Update chapter items
   chs.forEach((_,i)=>{
     const k=`${examId}_${i}`;
     const d=state.ch[k];
@@ -1007,17 +1347,20 @@ function toggleCh(examId,idx,event){
   state.ch[k]=!wasDone;
 
   if(!wasDone){
+    soundCheck();
     markStudied();
     const e=EXAMS.find(x=>x.id===examId);
     xpPopup(e.xp, event.clientX, event.clientY);
     state.todayCh++;
+  }else{
+    soundUncheck();
   }
+  snapshotToday();
   save();
-
-  // Targeted updates instead of full renderAll
   patchQuestItem(examId);
   updateBossProgress();
   renderXP();
+  renderChart();
   renderPomoStats();
   checkAch();
 }
@@ -1045,7 +1388,13 @@ function checkAch(){
       state.unlocked.push(a.id); news.push(a);
     }
   });
-  if(news.length){save(); renderAch(); news.forEach((a,i)=>setTimeout(()=>notify('🏆 Succès Débloqué !',`${a.icon} ${a.name} — ${a.desc}`),i*3500))}
+  if(news.length){
+    save(); renderAch();
+    news.forEach((a,i)=>setTimeout(()=>{
+      notify('🏆 Succès Débloqué !',`${a.icon} ${a.name} — ${a.desc}`);
+      soundAchievement();
+    },i*3500));
+  }
 }
 
 function notify(title,body){
@@ -1057,7 +1406,7 @@ function notify(title,body){
 }
 
 // ══════════════════════════════════════════════════════
-// POMODORO
+// POMODORO  —  BUG FIX: always clear both intervals
 // ══════════════════════════════════════════════════════
 
 let pomoMode='work';
@@ -1071,13 +1420,20 @@ const WORK_SECS=50*60;
 
 function getBreakSecs(){return breakDurMins*60;}
 
+/* ── FIX: single helper to stop everything cleanly ── */
+function stopAllTimers(){
+  clearInterval(pomoInterval); pomoInterval=null;
+  clearInterval(breakInterval); breakInterval=null;
+  pomoRunning=false;
+}
+
 function setBreakDur(mins){
   breakDurMins=mins;
   ['5','10','15'].forEach(d=>{
     document.getElementById(`durPill${d}`).classList.toggle('active',String(mins)===d);
   });
   if(pomoMode==='break'){
-    clearInterval(pomoInterval); pomoRunning=false;
+    stopAllTimers();
     pomoSecs=getBreakSecs();
     document.getElementById('startBtn').textContent='▶ LANCER';
     renderPomoDisplay();
@@ -1085,9 +1441,9 @@ function setBreakDur(mins){
 }
 
 function setMode(m){
+  stopAllTimers(); /* FIX: clear both */
   pomoMode=m;
   pomoSecs=(m==='work')?WORK_SECS:getBreakSecs();
-  clearInterval(pomoInterval); pomoRunning=false;
   document.getElementById('startBtn').textContent='▶ LANCER';
   document.getElementById('pillWork').classList.toggle('active',m==='work');
   document.getElementById('pillBreak').classList.toggle('active',m==='break');
@@ -1099,12 +1455,13 @@ function setMode(m){
 
 function toggleTimer(){
   if(pomoRunning){
-    clearInterval(pomoInterval); pomoRunning=false;
+    stopAllTimers();
     document.getElementById('startBtn').textContent='▶ REPRENDRE';
   }else{
     pomoRunning=true;
     document.getElementById('startBtn').textContent='⏸ PAUSE';
     markStudied();
+    soundPomoStart();
     pomoInterval=setInterval(tickPomo,1000);
   }
 }
@@ -1113,14 +1470,24 @@ function tickPomo(){
   pomoSecs--;
   renderPomoDisplay();
   if(pomoSecs<=0){
-    clearInterval(pomoInterval); pomoRunning=false;
+    stopAllTimers(); /* FIX: clean stop */
     if(pomoMode==='work'){
       sessNum++;
-      state.totalSess++; state.todaySess++; state.todayMins+=50;
+      state.totalSess++;
+      state.todaySess++;
+      state.todayMins+=50;
+      state.totalMins=(state.totalMins||0)+50; /* track total for marathon achievement */
       state.sessNum=sessNum;
+      logSession(sessNum-1,50);
+      snapshotToday();
       save(); renderPomoStats(); checkAch();
+      soundTimerDone();
       notify('⚔️ Session terminée !',`Bravo ! +50 min · Session #${sessNum-1} accomplie`);
-      setTimeout(()=>{setMode('break'); showBreak(getBreakSecs());},600);
+      setTimeout(()=>{
+        setMode('break');
+        soundBreakStart();
+        showBreak(getBreakSecs());
+      },600);
     }else{
       document.getElementById('breakOv').classList.remove('active');
       setMode('work');
@@ -1132,7 +1499,7 @@ function tickPomo(){
 }
 
 function resetTimer(){
-  clearInterval(pomoInterval); pomoRunning=false;
+  stopAllTimers(); /* FIX: clear both */
   pomoSecs=(pomoMode==='work')?WORK_SECS:getBreakSecs();
   document.getElementById('startBtn').textContent='▶ LANCER';
   renderPomoDisplay();
@@ -1143,8 +1510,7 @@ function renderPomoDisplay(){
   document.getElementById('pomoTime').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
   const total=(pomoMode==='work')?WORK_SECS:getBreakSecs();
   const prog=pomoSecs/total;
-  const offset=CIRCUMFERENCE*(1-prog);
-  document.getElementById('ringProg').style.strokeDashoffset=offset;
+  document.getElementById('ringProg').style.strokeDashoffset=CIRCUMFERENCE*(1-prog);
 }
 
 function renderPomoStats(){
@@ -1156,11 +1522,11 @@ function renderPomoStats(){
 function showBreak(secs){
   let s=secs;
   document.getElementById('breakOv').classList.add('active');
-  clearInterval(breakInterval);
+  stopAllTimers(); /* FIX: make sure nothing else running */
   function tick(){
     const m=Math.floor(s/60),sec=s%60;
     document.getElementById('breakTime').textContent=String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
-    if(s<=0){clearInterval(breakInterval); skipBreak();}
+    if(s<=0){stopAllTimers();skipBreak();return;}
     s--;
   }
   tick();
@@ -1168,25 +1534,55 @@ function showBreak(secs){
 }
 
 function skipBreak(){
-  clearInterval(breakInterval);
+  stopAllTimers(); /* FIX: clean both */
   document.getElementById('breakOv').classList.remove('active');
   setMode('work');
 }
 
 // ══════════════════════════════════════════════════════
-// IMPORT / EXPORT
+// KEYBOARD SHORTCUTS
 // ══════════════════════════════════════════════════════
 
-function openModal(){
-  const encoded=JSON.stringify(state, null, 2);
-  document.getElementById('exportData').value=encoded;
-  document.getElementById('importData').value='';
-  document.getElementById('importExportModal').classList.add('active');
+document.addEventListener('keydown',ev=>{
+  // Don't fire if typing in a textarea or input
+  if(['TEXTAREA','INPUT'].includes(ev.target.tagName)) return;
+  if(ev.key===' ' || ev.key==='k' || ev.key==='K'){
+    ev.preventDefault();
+    toggleTimer();
+  }
+  if(ev.key==='r' || ev.key==='R'){
+    ev.preventDefault();
+    resetTimer();
+  }
+});
+
+// ══════════════════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════════════════
+
+function openModal(id){
+  if(id==='importExportModal'){
+    document.getElementById('exportData').value=JSON.stringify(state,null,2);
+    document.getElementById('importData').value='';
+    updatePermStatus(); // refresh permission status
+  }
+  if(id==='notifModal'){
+    updatePermStatus();
+    updateReminderStatus();
+  }
+  document.getElementById(id).classList.add('active');
 }
 
-function closeModal(){
-  document.getElementById('importExportModal').classList.remove('active');
+function closeModal(id){
+  document.getElementById(id).classList.remove('active');
 }
+
+// Close on overlay click
+['importExportModal','historyModal','notifModal','confirmModal'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{
+    if(e.target===e.currentTarget) closeModal(id);
+  });
+});
 
 function copyExport(){
   const ta=document.getElementById('exportData');
@@ -1196,7 +1592,7 @@ function copyExport(){
 }
 
 function downloadExport(){
-  const data=JSON.stringify(state, null, 2);
+  const data=JSON.stringify(state,null,2);
   const blob=new Blob([data],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
@@ -1206,9 +1602,7 @@ function downloadExport(){
   URL.revokeObjectURL(url);
 }
 
-function loadFromFile(){
-  document.getElementById('fileInput').click();
-}
+function loadFromFile(){document.getElementById('fileInput').click();}
 
 function readFile(event){
   const file=event.target.files[0];
@@ -1219,28 +1613,26 @@ function readFile(event){
     notify('📂 Fichier chargé','Clique sur "Importer & Charger" pour appliquer.');
   };
   reader.readAsText(file);
-  event.target.value=''; // reset
+  event.target.value='';
 }
 
 function doImport(){
   const raw=document.getElementById('importData').value.trim();
-  if(!raw){notify('⚠️ Erreur','Aucune donnée à importer.'); return;}
+  if(!raw){notify('⚠️ Erreur','Aucune donnée à importer.');return;}
   try{
     const parsed=JSON.parse(raw);
-    // Validate minimal structure
-    if(typeof parsed!=='object'||parsed===null||typeof parsed.ch==='undefined'){
-      throw new Error('Structure invalide');
-    }
-    const d=defaultState();
-    state={...d,...parsed,ch:parsed.ch||{}};
+    if(typeof parsed!=='object'||parsed===null||typeof parsed.ch==='undefined') throw new Error();
+    state={...defaultState(),...parsed,ch:parsed.ch||{},notes:parsed.notes||{},sessionLog:parsed.sessionLog||[],dailyHistory:parsed.dailyHistory||[]};
     sessNum=state.sessNum||1;
     localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-    closeModal();
-    _lastLevel=0;
+    closeModal('importExportModal');
+    _lastLevel=getLevel(getXP(state)).lv; /* FIX: prevent false level-up on import */
+    applyTheme(state.theme||'dark');
+    applySoundToggle();
     renderAll();
     checkAch();
     notify('✅ Importé !','Ta progression a été restaurée avec succès.');
-  }catch(err){
+  }catch{
     notify('❌ Erreur','Sauvegarde invalide ou corrompue.');
   }
 }
@@ -1249,31 +1641,18 @@ function doImport(){
 // RESET
 // ══════════════════════════════════════════════════════
 
-function openConfirm(){
-  document.getElementById('confirmModal').classList.add('active');
-}
-
-function closeConfirm(){
-  document.getElementById('confirmModal').classList.remove('active');
-}
-
 function doReset(){
+  stopAllTimers();
   state=defaultState();
   sessNum=1;
   localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-  closeConfirm();
+  closeModal('confirmModal');
   _lastLevel=0;
+  applyTheme('dark');
+  applySoundToggle();
   renderAll();
   notify('🗑 Réinitialisé','Toute la progression a été effacée.');
 }
-
-// Close modals on overlay click
-document.getElementById('importExportModal').addEventListener('click',e=>{
-  if(e.target===e.currentTarget)closeModal();
-});
-document.getElementById('confirmModal').addEventListener('click',e=>{
-  if(e.target===e.currentTarget)closeConfirm();
-});
 
 // ══════════════════════════════════════════════════════
 // STARFIELD
@@ -1284,12 +1663,11 @@ function initStarfield(){
   const ctx=cv.getContext('2d');
   cv.width=window.innerWidth; cv.height=window.innerHeight;
   const stars=Array.from({length:140},()=>({
-    x:Math.random()*cv.width, y:Math.random()*cv.height,
-    r:Math.random()*1.4+0.2, o:Math.random()*.6+.1,
+    x:Math.random()*cv.width,y:Math.random()*cv.height,
+    r:Math.random()*1.4+0.2,o:Math.random()*.6+.1,
     pulse:Math.random()*Math.PI*2,
   }));
-  let shootTimer=0;
-  const shooting=[];
+  let shootTimer=0; const shooting=[];
   function draw(){
     ctx.clearRect(0,0,cv.width,cv.height);
     const t=Date.now()/1000;
@@ -1299,18 +1677,21 @@ function initStarfield(){
       ctx.fillStyle=`rgba(200,185,255,${s.o})`; ctx.fill();
     });
     shootTimer++;
-    if(shootTimer>200){shootTimer=0; shooting.push({x:Math.random()*cv.width,y:Math.random()*cv.height*.5,len:0,speed:Math.random()*8+6,angle:Math.PI/6+Math.random()*.3,life:0})}
+    if(shootTimer>200){
+      shootTimer=0;
+      shooting.push({x:Math.random()*cv.width,y:Math.random()*cv.height*.5,len:0,speed:Math.random()*8+6,angle:Math.PI/6+Math.random()*.3,life:0});
+    }
     shooting.forEach((ss,i)=>{
       ss.len+=ss.speed; ss.life++;
       const ex=ss.x+Math.cos(ss.angle)*ss.len;
       const ey=ss.y+Math.sin(ss.angle)*ss.len;
       const grad=ctx.createLinearGradient(ss.x,ss.y,ex,ey);
       const al=Math.min(1,(80-ss.life)/80);
-      grad.addColorStop(0,`rgba(255,220,150,0)`);
+      grad.addColorStop(0,'rgba(255,220,150,0)');
       grad.addColorStop(1,`rgba(255,220,150,${al})`);
       ctx.beginPath(); ctx.moveTo(ss.x,ss.y); ctx.lineTo(ex,ey);
       ctx.strokeStyle=grad; ctx.lineWidth=1.5; ctx.stroke();
-      if(ss.life>80) shooting.splice(i,1);
+      if(ss.life>80)shooting.splice(i,1);
     });
     requestAnimationFrame(draw);
   }
@@ -1319,7 +1700,7 @@ function initStarfield(){
 }
 
 // ══════════════════════════════════════════════════════
-// RENDER ALL (full rebuild — used on init and reset/import)
+// RENDER ALL
 // ══════════════════════════════════════════════════════
 
 function renderAll(){
@@ -1330,6 +1711,7 @@ function renderAll(){
   renderStreak();
   renderPomoStats();
   updateBossProgress();
+  renderChart();
   document.getElementById('pomoSess').textContent=`Session #${sessNum}`;
 }
 
@@ -1337,10 +1719,13 @@ function renderAll(){
 // INIT
 // ══════════════════════════════════════════════════════
 
-_lastLevel=getLevel(getXP(state)).lv;
+_lastLevel=getLevel(getXP(state)).lv; /* FIX: set before first render */
+applyTheme(state.theme||'dark');
+applySoundToggle();
 initStarfield();
 renderAll();
 renderPomoDisplay();
+snapshotToday();
 tickCountdowns();
 setInterval(tickCountdowns,1000);
 checkAch();
