@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚔️ BloxusQuest — ULB Session Juin 2026</title>
+<title>⚔️ BloxusQuest — ULB Session Août 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cinzel+Decorative:wght@400;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -142,6 +142,7 @@ body{
 .boss-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
 .boss-name{font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.5px}
 .boss-sub{font-size:10px;color:var(--text-dim);margin-top:2px}
+.boss-loc{font-size:9px;color:var(--text-dim);margin-top:1px;font-style:italic}
 .threat-badge{font-size:9px;padding:2px 8px;border-radius:9px;background:rgba(0,0,0,.5);border:1px solid;font-family:'Cinzel',serif;white-space:nowrap}
 .boss-cd{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px}
 .cd-unit{text-align:center}
@@ -221,6 +222,7 @@ body{
 .ch-row{display:flex;flex-direction:column}
 .ch-item{display:flex;align-items:flex-start;gap:8px;padding:5px 6px;border-radius:3px;cursor:pointer;transition:background .15s}
 .ch-item:hover{background:var(--bg-card2)}
+.ch-item:focus-visible{outline:2px solid var(--arcane-bright);outline-offset:1px;background:var(--bg-card2)}
 .ch-check{width:15px;height:15px;border-radius:2px;border:1px solid var(--border-gold);background:var(--bg-dark);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .25s;margin-top:1px}
 .ch-item.done .ch-check{background:var(--arcane);border-color:var(--arcane-bright);color:#fff}
 .ch-item.done .ch-text{text-decoration:line-through;color:var(--text-dim);opacity:.55}
@@ -228,6 +230,7 @@ body{
 .ch-xp{font-size:9px;color:var(--text-dim);flex-shrink:0;margin-top:2px}
 .ch-note-btn{background:none;border:none;cursor:pointer;font-size:11px;color:var(--text-dim);padding:1px 4px;transition:color .2s;flex-shrink:0;margin-top:1px;line-height:1}
 .ch-note-btn:hover{color:var(--arcane-bright)}
+.ch-note-btn:focus-visible{outline:2px solid var(--arcane-bright);outline-offset:1px}
 .ch-note-btn.has-note{color:var(--arcane-bright)}
 .ch-note-area{display:none;padding:0 6px 6px 29px}
 .ch-note-area.open{display:block}
@@ -306,6 +309,7 @@ body{
 .modal-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:1px;flex:1}
 .modal-close{background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:0 4px;transition:color .2s}
 .modal-close:hover{color:var(--text-prim)}
+.modal-close:focus-visible{outline:2px solid var(--arcane-bright);outline-offset:1px}
 .modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
 .modal-section{display:flex;flex-direction:column;gap:8px}
 .modal-section-title{font-family:'Cinzel',serif;font-size:10px;color:var(--text-sec);letter-spacing:1.5px;text-transform:uppercase}
@@ -361,10 +365,14 @@ body{
 .sound-toggle{font-family:'Cinzel',serif;font-size:10px;padding:6px 12px;border-radius:3px;cursor:pointer;border:1px solid var(--border-gold);color:var(--text-sec);background:transparent;transition:all .2s}
 .sound-toggle:hover{border-color:var(--border-bright);color:var(--text-prim)}
 .sound-toggle.on{border-color:var(--emerald);color:var(--emerald)}
+.theme-toggle:focus-visible,.sound-toggle:focus-visible,.mode-pill:focus-visible,.dur-pill:focus-visible,.btn:focus-visible{outline:2px solid var(--arcane-bright);outline-offset:2px}
 
 /* ── PARTICLES ── */
 .particle{position:fixed;pointer-events:none;border-radius:50%;z-index:999;animation:particle-float 1.2s ease forwards}
 @keyframes particle-float{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+
+/* ── SR ONLY ── */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ── RESPONSIVE ── */
 @media(max-width:1100px){
@@ -378,40 +386,44 @@ body{
   .streak-wrap{align-items:center}
   .xp-bar-wrap{width:100%;max-width:220px}
 }
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}
+}
 </style>
 </head>
 <body>
 
-<canvas id="starfield"></canvas>
+<canvas id="starfield" aria-hidden="true"></canvas>
 
 <!-- ── BREAK OVERLAY ── -->
-<div class="break-ov" id="breakOv">
-  <div class="break-em">🌿</div>
+<div class="break-ov" id="breakOv" role="dialog" aria-modal="true" aria-label="Pause en cours">
+  <div class="break-em" aria-hidden="true">🌿</div>
   <div class="break-sub">Pause Sacrée</div>
-  <div class="break-big" id="breakTime">10:00</div>
+  <div class="break-big" id="breakTime" role="timer">10:00</div>
   <div class="break-hint">Lève-toi · Bois de l'eau · Repose tes yeux</div>
   <button class="btn btn-ghost" onclick="skipBreak()" style="margin-top:8px">Ignorer la pause →</button>
 </div>
 
 <!-- ── LEVEL UP OVERLAY ── -->
-<div class="lvlup-ov" id="lvlupOv" onclick="document.getElementById('lvlupOv').classList.remove('active')">
-  <div class="lvlup-em" id="lvlupEm">👑</div>
+<div class="lvlup-ov" id="lvlupOv" role="dialog" aria-modal="true" aria-label="Niveau supérieur atteint" onclick="document.getElementById('lvlupOv').classList.remove('active')">
+  <div class="lvlup-em" id="lvlupEm" aria-hidden="true">👑</div>
   <div class="lvlup-big" id="lvlupText">LEVEL UP !</div>
   <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--text-sec);letter-spacing:2px">Touche l'écran pour continuer</div>
 </div>
 
 <!-- ── IMPORT/EXPORT MODAL ── -->
-<div class="modal-ov" id="importExportModal">
+<div class="modal-ov" id="importExportModal" role="dialog" aria-modal="true" aria-labelledby="importExportTitle">
   <div class="modal-box">
     <div class="modal-head">
-      <span>📦</span>
-      <span class="modal-title">Importer / Exporter la Sauvegarde</span>
-      <button class="modal-close" onclick="closeModal('importExportModal')">✕</button>
+      <span aria-hidden="true">📦</span>
+      <span class="modal-title" id="importExportTitle">Importer / Exporter la Sauvegarde</span>
+      <button class="modal-close" onclick="closeModal('importExportModal')" aria-label="Fermer la fenêtre">✕</button>
     </div>
     <div class="modal-body">
       <div class="modal-section">
         <div class="modal-section-title">📤 Exporter</div>
         <p class="modal-info">Copie ce code pour sauvegarder ta progression.</p>
+        <label for="exportData" class="sr-only">Code de sauvegarde exporté</label>
         <textarea class="modal-textarea" id="exportData" readonly onclick="this.select()"></textarea>
         <div class="modal-row">
           <button class="btn btn-gold" onclick="copyExport()">📋 Copier</button>
@@ -421,24 +433,25 @@ body{
       <div class="modal-section" style="border-top:1px solid var(--border-gold);padding-top:14px">
         <div class="modal-section-title">📥 Importer</div>
         <p class="modal-info">Colle un code exporté pour restaurer ta progression.</p>
+        <label for="importData" class="sr-only">Coller le code de sauvegarde à importer</label>
         <textarea class="modal-textarea" id="importData" placeholder="Colle ici ton code de sauvegarde…"></textarea>
         <div class="modal-row">
           <button class="btn btn-emerald" onclick="doImport()">⚡ Importer & Charger</button>
           <button class="btn btn-ghost" onclick="loadFromFile()">📂 Depuis fichier</button>
         </div>
-        <input type="file" id="fileInput" accept=".json" style="display:none" onchange="readFile(event)">
+        <input type="file" id="fileInput" accept=".json" style="display:none" onchange="readFile(event)" aria-label="Choisir un fichier de sauvegarde">
       </div>
     </div>
   </div>
 </div>
 
 <!-- ── SESSION HISTORY MODAL ── -->
-<div class="modal-ov" id="historyModal">
+<div class="modal-ov" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyTitle">
   <div class="modal-box" style="max-width:580px">
     <div class="modal-head">
-      <span>📅</span>
-      <span class="modal-title">Historique des Sessions</span>
-      <button class="modal-close" onclick="closeModal('historyModal')">✕</button>
+      <span aria-hidden="true">📅</span>
+      <span class="modal-title" id="historyTitle">Historique des Sessions</span>
+      <button class="modal-close" onclick="closeModal('historyModal')" aria-label="Fermer la fenêtre">✕</button>
     </div>
     <div class="modal-body">
       <div class="sess-summary" id="sessSummary"></div>
@@ -446,7 +459,7 @@ body{
         <div class="modal-section-title">📋 Sessions récentes</div>
         <div class="sess-scroll"><table class="sess-table" id="sessTable">
           <thead><tr>
-            <th>#</th><th>Date</th><th>Durée</th><th>Chapitres ce jour</th>
+            <th scope="col">#</th><th scope="col">Date</th><th scope="col">Durée</th><th scope="col">Chapitres ce jour</th>
           </tr></thead>
           <tbody id="sessBody"></tbody>
         </table></div>
@@ -456,30 +469,30 @@ body{
 </div>
 
 <!-- ── NOTIFICATIONS SETTINGS MODAL ── -->
-<div class="modal-ov" id="notifModal">
+<div class="modal-ov" id="notifModal" role="dialog" aria-modal="true" aria-labelledby="notifTitle">
   <div class="modal-box" style="max-width:420px">
     <div class="modal-head">
-      <span>⏰</span>
-      <span class="modal-title">Rappels d'Étude</span>
-      <button class="modal-close" onclick="closeModal('notifModal')">✕</button>
+      <span aria-hidden="true">⏰</span>
+      <span class="modal-title" id="notifTitle">Rappels d'Étude</span>
+      <button class="modal-close" onclick="closeModal('notifModal')" aria-label="Fermer la fenêtre">✕</button>
     </div>
     <div class="modal-body">
       <div class="notif-setup">
         <p class="notif-desc">Reçois une notification browser chaque jour à l'heure choisie pour t'inciter à étudier.</p>
         <div class="notif-row">
-          <span class="toolbar-info">Autorisation :</span>
-          <span class="perm-status" id="permStatus">Inconnu</span>
+          <span class="toolbar-info" id="permLbl">Autorisation :</span>
+          <span class="perm-status" id="permStatus" role="status" aria-labelledby="permLbl">Inconnu</span>
           <button class="btn btn-gold" style="font-size:10px;padding:6px 12px" onclick="requestNotifPerm()">🔔 Autoriser</button>
         </div>
         <div class="notif-row">
-          <span class="toolbar-info">Heure du rappel :</span>
+          <label class="toolbar-info" for="reminderTimeInput">Heure du rappel :</label>
           <input type="time" class="time-input" id="reminderTimeInput" value="09:00">
         </div>
         <div class="notif-row">
           <button class="btn btn-emerald" style="font-size:10px;padding:6px 14px" onclick="saveReminder()">✅ Activer le rappel</button>
           <button class="btn btn-danger" style="font-size:10px;padding:6px 14px" onclick="disableReminder()">🔕 Désactiver</button>
         </div>
-        <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim)" id="reminderStatus">Aucun rappel actif</div>
+        <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim)" id="reminderStatus" role="status">Aucun rappel actif</div>
         <button class="btn btn-arcane" style="font-size:10px;padding:6px 14px" onclick="testNotif()">🧪 Tester une notification</button>
       </div>
     </div>
@@ -487,11 +500,11 @@ body{
 </div>
 
 <!-- ── CONFIRM RESET MODAL ── -->
-<div class="confirm-ov" id="confirmModal">
+<div class="confirm-ov" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmDesc">
   <div class="confirm-box">
-    <div class="confirm-em">⚠️</div>
-    <div class="confirm-title">Réinitialiser la Progression ?</div>
-    <div class="confirm-desc">Cette action effacera <strong>toute ta progression</strong>, tes sessions Pomodoro et tes succès débloqués. Cette action est <strong>irréversible</strong>.</div>
+    <div class="confirm-em" aria-hidden="true">⚠️</div>
+    <div class="confirm-title" id="confirmTitle">Réinitialiser la Progression ?</div>
+    <div class="confirm-desc" id="confirmDesc">Cette action effacera <strong>toute ta progression</strong>, tes sessions Pomodoro et tes succès débloqués. Cette action est <strong>irréversible</strong>.</div>
     <div class="confirm-row">
       <button class="btn btn-danger" onclick="doReset()">🗑 Tout effacer</button>
       <button class="btn btn-ghost" onclick="closeModal('confirmModal')">Annuler</button>
@@ -504,28 +517,28 @@ body{
   <!-- ══ HEADER ══ -->
   <div class="header">
     <div class="char-wrap">
-      <div class="char-avatar" id="charAv">🧑‍🎓</div>
+      <div class="char-avatar" id="charAv" aria-hidden="true">🧑‍🎓</div>
       <div class="char-info">
         <div class="char-name">Étudiant de l'ULB</div>
         <div class="char-level" id="lvlTxt">Niveau 1 — Apprenti</div>
-        <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xpFill" style="width:0%"></div></div>
+        <div class="xp-bar-wrap" role="progressbar" aria-label="Progression d'expérience" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="xpBarWrap"><div class="xp-bar-fill" id="xpFill" style="width:0%"></div></div>
         <div class="xp-text" id="xpTxt">0 / 200 XP</div>
       </div>
     </div>
     <div class="logo-block">
       <div class="logo-title">⚔️ BloxusQuest ⚔️</div>
-      <div class="logo-sub">ULB · Session de Juin 2026</div>
-      <div class="rune-sep">◈ ✦ ◈</div>
+      <div class="logo-sub">ULB · Session d'Août 2026 · Blocus combiné 4 cours</div>
+      <div class="rune-sep" aria-hidden="true">◈ ✦ ◈</div>
       <div class="global-stat" id="globalStat">0 chapitres maîtrisés</div>
     </div>
     <div class="streak-wrap">
       <div class="streak-pill">
-        <span class="streak-fire">🔥</span>
+        <span class="streak-fire" aria-hidden="true">🔥</span>
         <span class="streak-num" id="streakNum">0</span>
         <span class="streak-lbl">JOURS</span>
       </div>
       <div class="last-study" id="lastStudy">Aucune session encore</div>
-      <div id="streakWarning" style="display:none" class="streak-danger">⚠️ Étudie aujourd'hui !</div>
+      <div id="streakWarning" style="display:none" class="streak-danger" role="status">⚠️ Étudie aujourd'hui !</div>
     </div>
   </div>
 
@@ -535,12 +548,12 @@ body{
     <!-- ── LEFT ── -->
     <div style="display:flex;flex-direction:column;gap:14px">
       <div class="card">
-        <div class="card-head"><span>💀</span><span class="card-title">Boss à Vaincre</span></div>
+        <div class="card-head"><span aria-hidden="true">💀</span><span class="card-title">Boss à Vaincre</span></div>
         <div class="card-body"><div class="boss-list" id="bossList"></div></div>
       </div>
       <!-- CHART CARD -->
       <div class="card">
-        <div class="card-head"><span>📊</span><span class="card-title">Progression 7 Jours</span></div>
+        <div class="card-head"><span aria-hidden="true">📊</span><span class="card-title">Progression 7 Jours</span></div>
         <div class="card-body" style="padding:10px 14px">
           <div class="chart-wrap" id="chartWrap"></div>
         </div>
@@ -550,26 +563,26 @@ body{
     <!-- ── CENTER ── -->
     <div style="display:flex;flex-direction:column;gap:14px">
       <div class="card">
-        <div class="card-head"><span>⏳</span><span class="card-title">Minuteur de Combat</span></div>
+        <div class="card-head"><span aria-hidden="true">⏳</span><span class="card-title">Minuteur de Combat</span></div>
         <div class="card-body">
           <div class="pomo-wrap">
-            <div class="pomo-mode-pills">
-              <button class="mode-pill active" id="pillWork" onclick="setMode('work')">⚔️ Focus 50m</button>
-              <button class="mode-pill" id="pillBreak" onclick="setMode('break')">🌿 Repos</button>
+            <div class="pomo-mode-pills" role="group" aria-label="Mode du minuteur">
+              <button class="mode-pill active" id="pillWork" onclick="setMode('work')" aria-pressed="true">⚔️ Focus 50m</button>
+              <button class="mode-pill" id="pillBreak" onclick="setMode('break')" aria-pressed="false">🌿 Repos</button>
             </div>
-            <div class="break-dur-pills" id="breakDurPills" style="display:none">
+            <div class="break-dur-pills" id="breakDurPills" style="display:none" role="group" aria-label="Durée de la pause">
               <span class="break-dur-lbl">Durée :</span>
-              <button class="dur-pill active" id="durPill5" onclick="setBreakDur(5)">5m</button>
-              <button class="dur-pill" id="durPill10" onclick="setBreakDur(10)">10m</button>
-              <button class="dur-pill" id="durPill15" onclick="setBreakDur(15)">15m</button>
+              <button class="dur-pill active" id="durPill5" onclick="setBreakDur(5)" aria-pressed="true">5m</button>
+              <button class="dur-pill" id="durPill10" onclick="setBreakDur(10)" aria-pressed="false">10m</button>
+              <button class="dur-pill" id="durPill15" onclick="setBreakDur(15)" aria-pressed="false">15m</button>
             </div>
             <div class="pomo-ring">
-              <svg viewBox="0 0 210 210">
+              <svg viewBox="0 0 210 210" aria-hidden="true">
                 <circle class="ring-bg" cx="105" cy="105" r="92"/>
                 <circle class="ring-prog" id="ringProg" cx="105" cy="105" r="92" stroke-dasharray="578.05" stroke-dashoffset="0" stroke="#ffd700"/>
               </svg>
               <div class="pomo-inner">
-                <div class="pomo-time" id="pomoTime">50:00</div>
+                <div class="pomo-time" id="pomoTime" role="timer" aria-live="off">50:00</div>
                 <div class="pomo-lbl" id="pomoLbl">CONCENTRATION</div>
                 <div class="pomo-sess" id="pomoSess">Session #1</div>
               </div>
@@ -588,7 +601,7 @@ body{
         </div>
       </div>
       <div class="card">
-        <div class="card-head"><span>📜</span><span class="card-title">Journal de Quêtes</span></div>
+        <div class="card-head"><span aria-hidden="true">📜</span><span class="card-title">Journal de Quêtes</span></div>
         <div class="card-body" style="padding:8px"><div class="quest-list" id="questList"></div></div>
       </div>
     </div>
@@ -596,7 +609,7 @@ body{
     <!-- ── RIGHT ── -->
     <div>
       <div class="card">
-        <div class="card-head"><span>🏆</span><span class="card-title">Succès</span></div>
+        <div class="card-head"><span aria-hidden="true">🏆</span><span class="card-title">Succès</span></div>
         <div class="card-body"><div class="ach-grid" id="achGrid"></div></div>
       </div>
     </div>
@@ -613,13 +626,15 @@ body{
       <button class="btn btn-danger" onclick="openModal('confirmModal')" style="font-size:10px;padding:6px 14px">🗑 Reset</button>
     </div>
     <div class="toolbar-right">
-      <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Sons</button>
-      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Thème</button>
-      <span class="toolbar-info" id="saveStatus">💾 Sauvegarde automatique</span>
+      <button class="sound-toggle" id="soundToggle" onclick="toggleSound()" aria-pressed="true">🔊 Sons</button>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-pressed="false">🌙 Thème</button>
+      <span class="toolbar-info" id="saveStatus" role="status">💾 Sauvegarde automatique</span>
     </div>
   </div>
 
 </div>
+
+<div id="notifRegion" class="sr-only" role="status" aria-live="polite"></div>
 
 <script>
 // ══════════════════════════════════════════════════════
@@ -627,10 +642,11 @@ body{
 // ══════════════════════════════════════════════════════
 
 const EXAMS = [
-  {id:'PHYSF103', boss:'Archimage Physix',    dungeon:'Donjon de la Physique',    date:new Date('2026-05-26T09:00:00'), color:'#ff6b35', icon:'⚡', xp:50},
-  {id:'INFOF103', boss:'Golem Algorithmix',   dungeon:'Forêt des Algorithmes',    date:new Date('2026-05-29T09:00:00'), color:'#00c896', icon:'🌲', xp:60},
-  {id:'INFOF105', boss:'Dragon Compilator',   dungeon:'Citadelle du C++',         date:new Date('2026-06-03T09:00:00'), color:'#4a9eff', icon:'⚙️', xp:55},
-  {id:'MATHF114', boss:'Lich Mathématix',     dungeon:"Château de l'Algèbre",     date:new Date('2026-06-12T09:00:00'), color:'#ffd700', icon:'🏰', xp:65},
+  {id:'MATHF114_P2', boss:'Lich Mathématix',  dungeon:"Château de l'Algèbre (Math P2)", date:new Date('2026-08-18T09:00:00'), color:'#ffd700', icon:'🏰', xp:65, loc:'P.FORUM.AB · Aud. Brout-Englert-Prigogine'},
+  {id:'PHYSF103',    boss:'Archimage Physix', dungeon:'Donjon de la Physique',           date:new Date('2026-08-20T09:00:00'), color:'#ff6b35', icon:'⚡', xp:50, loc:'P.V1 (Chapiteau complet)'},
+  {id:'MATHF114_P1', boss:'Sphinx Analytix',  dungeon:"Tour de l'Analyse (Math P1)",     date:new Date('2026-08-24T09:00:00'), color:'#c39bd3', icon:'🗼', xp:60, loc:'P.FORUM.F · Aud. TITS'},
+  {id:'INFOF103',    boss:'Golem Algorithmix',dungeon:'Forêt des Algorithmes',           date:new Date('2026-08-25T09:00:00'), color:'#00c896', icon:'🌲', xp:70, loc:'S.K.1.105'},
+  {id:'INFOF105',    boss:'Dragon Compilator',dungeon:'Citadelle du C++',                date:new Date('2026-08-28T09:00:00'), color:'#4a9eff', icon:'⚙️', xp:55, loc:'P.FORUM.AB · Aud. Brout-Englert'},
 ];
 
 const CHAPTERS = {
@@ -653,13 +669,23 @@ const CHAPTERS = {
     'Pointeurs, références, const, tableaux, fonctions','POD (Plain Old Data)','Les ADT en C++',
     'Compilation et exécution en assembleur 80386','Instructions arithmétiques (ASM)','Choix et boucles (ASM)',
   ],
-  MATHF114:[
+  MATHF114_P2:[
     'Équations différentielles','Matrices et systèmes','Les espaces Kⁿ','Corps Commutatifs',
     'Espaces vectoriels sur un corps','Parties Génératrices et Parties Libres','Bases et dimension',
     'Applications Linéaires','Noyau et Image','Applications Linéaires et Matrices',
     'Applications Linéaires et Opérations',"Matrice inverse et réciproque d'une application",
     'Valeurs propres et Vecteurs propres','Distances et Normes','Produits scalaires','Isométries',
     "Éléments d'arithmétique",'Permutations',
+  ],
+  MATHF114_P1:[
+    'Logique & types de preuve (récurrence, absurde, contraposée)',
+    'Combinatoire (binôme, double comptage, inclusion-exclusion)',
+    'Topologie de ℝ/ℝⁿ (ouvert/fermé par les boules)',
+    'Limites & continuité (ε-δ, non-existence, TVI)',
+    "Dérivées (définition-limite, TAF, l'Hôpital)",
+    'Polynômes de Taylor (usuels + composition)',
+    'Calcul multivarié (gradient, dérivée directionnelle, différentiabilité)',
+    'Intégrales (TFA, Fubini, intégrales impropres)',
   ],
 };
 
@@ -670,7 +696,9 @@ const ACHIEVEMENTS = [
   {id:'phys',       icon:'⚡', name:'Physicien',         desc:'Terminer PHYSF103',                             chk:s=>courseDone(s,'PHYSF103')},
   {id:'algo',       icon:'🌲', name:'Algorithmiste',     desc:'Terminer INFOF103',                             chk:s=>courseDone(s,'INFOF103')},
   {id:'ldp',        icon:'💻', name:'Programmeur',       desc:'Terminer INFOF105',                             chk:s=>courseDone(s,'INFOF105')},
-  {id:'math',       icon:'📐', name:'Mathématicien',     desc:'Terminer MATHF114',                             chk:s=>courseDone(s,'MATHF114')},
+  {id:'mathp2',     icon:'📐', name:'Algébriste',        desc:'Terminer Algèbre — Math P2',                    chk:s=>courseDone(s,'MATHF114_P2')},
+  {id:'mathp1',     icon:'📈', name:'Analyste',          desc:'Terminer Analyse — Math P1',                    chk:s=>courseDone(s,'MATHF114_P1')},
+  {id:'math',       icon:'🧮', name:'Mathématicien Complet', desc:'Terminer Math P1 & P2',                    chk:s=>courseDone(s,'MATHF114_P1')&&courseDone(s,'MATHF114_P2')},
   {id:'half',       icon:'🗺️', name:'Demi-chemin',       desc:'Atteindre 50% de complétion',                   chk:s=>totalPct(s)>=50},
   {id:'pomo5',      icon:'⏳', name:'Focalisé',           desc:'Compléter 5 sessions Pomodoro',                 chk:s=>s.totalSess>=5},
   {id:'pomo20',     icon:'🕯️', name:'Moine',              desc:'Compléter 20 sessions Pomodoro',                chk:s=>s.totalSess>=20},
@@ -681,13 +709,13 @@ const ACHIEVEMENTS = [
 ];
 
 const LEVELS = [
-  {min:0,    max:200,  name:'Apprenti',    av:'🧑‍🎓'},
-  {min:200,  max:500,  name:'Novice',      av:'🧙'},
-  {min:500,  max:900,  name:'Aventurier',  av:'🗡️'},
-  {min:900,  max:1400, name:'Guerrier',    av:'⚔️'},
-  {min:1400, max:2000, name:'Chevalier',   av:'🛡️'},
-  {min:2000, max:2800, name:'Maître',      av:'🔮'},
-  {min:2800, max:99999,name:'Légendaire',  av:'👑'},
+  {min:0,    max:250,  name:'Apprenti',    av:'🧑‍🎓'},
+  {min:250,  max:600,  name:'Novice',      av:'🧙'},
+  {min:600,  max:1100, name:'Aventurier',  av:'🗡️'},
+  {min:1100, max:1700, name:'Guerrier',    av:'⚔️'},
+  {min:1700, max:2400, name:'Chevalier',   av:'🛡️'},
+  {min:2400, max:3300, name:'Maître',      av:'🔮'},
+  {min:3300, max:99999,name:'Légendaire',  av:'👑'},
 ];
 
 const CIRCUMFERENCE = 2*Math.PI*92;
@@ -740,6 +768,15 @@ function totalDone(s){return Object.values(s.ch).filter(Boolean).length}
 function courseDone(s,id){return CHAPTERS[id].every((_,i)=>s.ch[`${id}_${i}`])}
 function totalAll(){return Object.values(CHAPTERS).reduce((a,b)=>a+b.length,0)}
 function totalPct(s){return Math.round(totalDone(s)/totalAll()*100)}
+
+function escapeHtml(str){
+  return String(str==null?'':str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
 
 function getXP(s){
   let xp=0;
@@ -865,7 +902,10 @@ function soundPomoStart(){
 function applyTheme(t){
   document.documentElement.setAttribute('data-theme',t);
   const btn=document.getElementById('themeToggle');
-  if(btn) btn.textContent=t==='dark'?'☀️ Parchemin':'🌙 Sombre';
+  if(btn){
+    btn.textContent=t==='dark'?'☀️ Parchemin':'🌙 Sombre';
+    btn.setAttribute('aria-pressed',t==='light'?'true':'false');
+  }
 }
 
 function toggleTheme(){
@@ -883,6 +923,7 @@ function applySoundToggle(){
   if(btn){
     btn.textContent=state.soundEnabled?'🔊 Sons':'🔇 Muet';
     btn.classList.toggle('on',state.soundEnabled);
+    btn.setAttribute('aria-pressed',state.soundEnabled?'true':'false');
   }
 }
 
@@ -1001,6 +1042,8 @@ function renderXP(){
   document.getElementById('xpTxt').textContent=`${xp} / ${lvl.max} XP`;
   document.getElementById('lvlTxt').textContent=`Niveau ${lvl.lv} — ${lvl.name}`;
   document.getElementById('charAv').textContent=lvl.av;
+  const wrap=document.getElementById('xpBarWrap');
+  if(wrap) wrap.setAttribute('aria-valuenow',String(Math.round(pct)));
   const done=totalDone(state);
   document.getElementById('globalStat').textContent=`${done} / ${totalAll()} chapitres · ${totalPct(state)}%`;
   if(_lastLevel>0 && lvl.lv>_lastLevel){showLevelUp(lvl);}
@@ -1048,8 +1091,9 @@ function renderBosses(){
     el.innerHTML=`
       <div class="boss-top">
         <div>
-          <div class="boss-name" style="color:${e.color}">${e.icon} ${e.boss}</div>
-          <div class="boss-sub">${e.dungeon} · ${e.id}</div>
+          <div class="boss-name" style="color:${e.color}">${e.icon} ${escapeHtml(e.boss)}</div>
+          <div class="boss-sub">${escapeHtml(e.dungeon)} · ${escapeHtml(e.id)}</div>
+          <div class="boss-loc">📍 ${escapeHtml(e.loc||'')}</div>
         </div>
         <div class="threat-badge" id="thr_${e.id}" style="color:${e.color};border-color:${e.color}">…</div>
       </div>
@@ -1244,17 +1288,19 @@ function renderQuests(){
     const items=chs.map((ch,i)=>{
       const k=`${e.id}_${i}`;
       const d=state.ch[k];
-      const hasNote=!!(state.notes[k]?.trim());
+      const noteVal=state.notes[k]||'';
+      const hasNote=!!(noteVal.trim());
       return`<div class="ch-row">
-        <div class="ch-item${d?' done':''}" data-exam="${e.id}" data-idx="${i}">
-          <div class="ch-check">${d?'✓':''}</div>
-          <div class="ch-text">${i+1}. ${ch}</div>
+        <div class="ch-item${d?' done':''}" data-exam="${e.id}" data-idx="${i}" role="checkbox" aria-checked="${d?'true':'false'}" tabindex="0" aria-label="${escapeHtml(ch)}">
+          <div class="ch-check" aria-hidden="true">${d?'✓':''}</div>
+          <div class="ch-text">${i+1}. ${escapeHtml(ch)}</div>
           <div class="ch-xp">+${e.xp} XP</div>
-          <button class="ch-note-btn${hasNote?' has-note':''}" data-note-key="${k}" title="${hasNote?'Voir note':'Ajouter note'}">📝</button>
+          <button class="ch-note-btn${hasNote?' has-note':''}" data-note-key="${k}" title="${hasNote?'Voir note':'Ajouter note'}" aria-label="${hasNote?'Voir la note de ce chapitre':'Ajouter une note à ce chapitre'}">📝</button>
         </div>
         <div class="ch-note-area" id="note_${k}">
           <div class="ch-note-placeholder">Note personnelle :</div>
-          <textarea class="ch-note-input" rows="2" data-note-key="${k}" placeholder="Tape ta note ici…">${state.notes[k]||''}</textarea>
+          <label for="ta_${k}" class="sr-only">Note pour ${escapeHtml(ch)}</label>
+          <textarea class="ch-note-input" id="ta_${k}" rows="2" data-note-key="${k}" placeholder="Tape ta note ici…">${escapeHtml(noteVal)}</textarea>
         </div>
       </div>`;
     }).join('');
@@ -1262,11 +1308,11 @@ function renderQuests(){
     const el=document.createElement('div');
     el.className='quest-item'; el.style.borderColor=e.color+'55';
     el.innerHTML=`
-      <div class="quest-header">
-        <span class="q-icon">${e.icon}</span>
+      <div class="quest-header" role="button" tabindex="0" aria-expanded="${isOpen?'true':'false'}" aria-controls="${listId}">
+        <span class="q-icon" aria-hidden="true">${e.icon}</span>
         <div class="q-info">
-          <div class="q-name" style="color:${e.color}">${e.dungeon}</div>
-          <div class="q-sub">${e.id} · Examen le ${e.date.toLocaleDateString('fr-FR')}</div>
+          <div class="q-name" style="color:${e.color}">${escapeHtml(e.dungeon)}</div>
+          <div class="q-sub">${escapeHtml(e.id)} · Examen le ${e.date.toLocaleDateString('fr-FR')} · ${escapeHtml(e.loc||'')}</div>
         </div>
         <span class="q-xp">${xpE}/${xpT} XP</span>
       </div>
@@ -1276,8 +1322,15 @@ function renderQuests(){
       </div>
       <div class="chapter-list${isOpen?' open':''}" id="${listId}">${items}</div>`;
 
-    el.querySelector('.quest-header').addEventListener('click',()=>{
-      el.querySelector('.chapter-list').classList.toggle('open');
+    const headerEl=el.querySelector('.quest-header');
+    const toggleChapterList=()=>{
+      const list=el.querySelector('.chapter-list');
+      const nowOpen=list.classList.toggle('open');
+      headerEl.setAttribute('aria-expanded',nowOpen?'true':'false');
+    };
+    headerEl.addEventListener('click',toggleChapterList);
+    headerEl.addEventListener('keydown',ev=>{
+      if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggleChapterList();}
     });
 
     el.querySelector('.chapter-list').addEventListener('click',ev=>{
@@ -1294,6 +1347,16 @@ function renderQuests(){
       const item=ev.target.closest('.ch-item');
       if(!item)return;
       toggleCh(item.dataset.exam,parseInt(item.dataset.idx),ev);
+    });
+
+    el.querySelector('.chapter-list').addEventListener('keydown',ev=>{
+      if(ev.target.closest('.ch-note-btn')||ev.target.closest('textarea'))return;
+      const item=ev.target.closest('.ch-item');
+      if(!item)return;
+      if(ev.key==='Enter'||ev.key===' '){
+        ev.preventDefault();
+        toggleCh(item.dataset.exam,parseInt(item.dataset.idx),ev);
+      }
     });
 
     // Note auto-save on input
@@ -1337,6 +1400,7 @@ function patchQuestItem(examId){
     const item=listEl.querySelector(`[data-exam="${examId}"][data-idx="${i}"]`);
     if(!item)return;
     item.classList.toggle('done',!!d);
+    item.setAttribute('aria-checked',d?'true':'false');
     item.querySelector('.ch-check').textContent=d?'✓':'';
   });
 }
@@ -1350,7 +1414,9 @@ function toggleCh(examId,idx,event){
     soundCheck();
     markStudied();
     const e=EXAMS.find(x=>x.id===examId);
-    xpPopup(e.xp, event.clientX, event.clientY);
+    const x=event&&event.clientX?event.clientX:window.innerWidth/2;
+    const y=event&&event.clientY?event.clientY:window.innerHeight/2;
+    xpPopup(e.xp,x,y);
     state.todayCh++;
   }else{
     soundUncheck();
@@ -1376,7 +1442,9 @@ function renderAch(){
     const u=state.unlocked.includes(a.id);
     const el=document.createElement('div');
     el.className=`ach ${u?'unlocked':'locked'}`;
-    el.innerHTML=`<span class="ach-icon">${a.icon}</span><div class="ach-name">${a.name}</div><div class="ach-tip">${a.desc}</div>`;
+    el.setAttribute('tabindex','0');
+    el.setAttribute('aria-label',`${a.name} — ${a.desc} — ${u?'débloqué':'verrouillé'}`);
+    el.innerHTML=`<span class="ach-icon" aria-hidden="true">${a.icon}</span><div class="ach-name">${escapeHtml(a.name)}</div><div class="ach-tip">${escapeHtml(a.desc)}</div>`;
     c.appendChild(el);
   });
 }
@@ -1400,13 +1468,15 @@ function checkAch(){
 function notify(title,body){
   const el=document.createElement('div');
   el.className='notif';
-  el.innerHTML=`<div class="notif-title">${title}</div><div class="notif-body">${body}</div>`;
+  el.innerHTML=`<div class="notif-title">${escapeHtml(title)}</div><div class="notif-body">${escapeHtml(body)}</div>`;
   document.body.appendChild(el);
+  const region=document.getElementById('notifRegion');
+  if(region) region.textContent=`${title} — ${body}`;
   setTimeout(()=>el.remove(),3400);
 }
 
 // ══════════════════════════════════════════════════════
-// POMODORO  —  BUG FIX: always clear both intervals
+// POMODORO  —  epoch-based timing (no drift on tab throttling)
 // ══════════════════════════════════════════════════════
 
 let pomoMode='work';
@@ -1415,22 +1485,29 @@ let pomoSecs=50*60;
 let pomoRunning=false;
 let pomoInterval=null;
 let breakInterval=null;
+let pomoTargetTime=null;   // epoch ms when the running work/break timer should hit 0
+let breakTargetTime=null;  // epoch ms when the break overlay countdown should hit 0
 
 const WORK_SECS=50*60;
 
 function getBreakSecs(){return breakDurMins*60;}
 
-/* ── FIX: single helper to stop everything cleanly ── */
+/* ── single helper to stop everything cleanly ── */
 function stopAllTimers(){
   clearInterval(pomoInterval); pomoInterval=null;
   clearInterval(breakInterval); breakInterval=null;
   pomoRunning=false;
+  pomoTargetTime=null;
+  breakTargetTime=null;
 }
 
 function setBreakDur(mins){
   breakDurMins=mins;
   ['5','10','15'].forEach(d=>{
-    document.getElementById(`durPill${d}`).classList.toggle('active',String(mins)===d);
+    const btn=document.getElementById(`durPill${d}`);
+    const isActive=String(mins)===d;
+    btn.classList.toggle('active',isActive);
+    btn.setAttribute('aria-pressed',isActive?'true':'false');
   });
   if(pomoMode==='break'){
     stopAllTimers();
@@ -1441,12 +1518,14 @@ function setBreakDur(mins){
 }
 
 function setMode(m){
-  stopAllTimers(); /* FIX: clear both */
+  stopAllTimers();
   pomoMode=m;
   pomoSecs=(m==='work')?WORK_SECS:getBreakSecs();
   document.getElementById('startBtn').textContent='▶ LANCER';
   document.getElementById('pillWork').classList.toggle('active',m==='work');
+  document.getElementById('pillWork').setAttribute('aria-pressed',m==='work'?'true':'false');
   document.getElementById('pillBreak').classList.toggle('active',m==='break');
+  document.getElementById('pillBreak').setAttribute('aria-pressed',m==='break'?'true':'false');
   document.getElementById('pomoLbl').textContent=m==='work'?'CONCENTRATION':'REPOS';
   document.getElementById('ringProg').style.stroke=m==='work'?'#ffd700':'#00c896';
   document.getElementById('breakDurPills').style.display=m==='break'?'flex':'none';
@@ -1455,22 +1534,32 @@ function setMode(m){
 
 function toggleTimer(){
   if(pomoRunning){
+    // Pause: freeze remaining seconds based on the real clock, then stop.
+    if(pomoTargetTime!=null){
+      pomoSecs=Math.max(0,Math.round((pomoTargetTime-Date.now())/1000));
+    }
     stopAllTimers();
     document.getElementById('startBtn').textContent='▶ REPRENDRE';
+    renderPomoDisplay();
   }else{
     pomoRunning=true;
+    pomoTargetTime=Date.now()+pomoSecs*1000;
     document.getElementById('startBtn').textContent='⏸ PAUSE';
     markStudied();
     soundPomoStart();
-    pomoInterval=setInterval(tickPomo,1000);
+    pomoInterval=setInterval(tickPomo,250);
   }
 }
 
 function tickPomo(){
-  pomoSecs--;
-  renderPomoDisplay();
+  if(pomoTargetTime==null)return;
+  const remaining=Math.max(0,Math.round((pomoTargetTime-Date.now())/1000));
+  if(remaining!==pomoSecs){
+    pomoSecs=remaining;
+    renderPomoDisplay();
+  }
   if(pomoSecs<=0){
-    stopAllTimers(); /* FIX: clean stop */
+    stopAllTimers();
     if(pomoMode==='work'){
       sessNum++;
       state.totalSess++;
@@ -1499,7 +1588,7 @@ function tickPomo(){
 }
 
 function resetTimer(){
-  stopAllTimers(); /* FIX: clear both */
+  stopAllTimers();
   pomoSecs=(pomoMode==='work')?WORK_SECS:getBreakSecs();
   document.getElementById('startBtn').textContent='▶ LANCER';
   renderPomoDisplay();
@@ -1520,21 +1609,21 @@ function renderPomoStats(){
 }
 
 function showBreak(secs){
-  let s=secs;
   document.getElementById('breakOv').classList.add('active');
-  stopAllTimers(); /* FIX: make sure nothing else running */
+  stopAllTimers(); /* make sure nothing else running */
+  breakTargetTime=Date.now()+secs*1000;
   function tick(){
-    const m=Math.floor(s/60),sec=s%60;
+    const remaining=Math.max(0,Math.round((breakTargetTime-Date.now())/1000));
+    const m=Math.floor(remaining/60),sec=remaining%60;
     document.getElementById('breakTime').textContent=String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
-    if(s<=0){stopAllTimers();skipBreak();return;}
-    s--;
+    if(remaining<=0){clearInterval(breakInterval);breakInterval=null;skipBreak();return;}
   }
   tick();
-  breakInterval=setInterval(tick,1000);
+  breakInterval=setInterval(tick,250);
 }
 
 function skipBreak(){
-  stopAllTimers(); /* FIX: clean both */
+  stopAllTimers();
   document.getElementById('breakOv').classList.remove('active');
   setMode('work');
 }
@@ -1584,11 +1673,36 @@ function closeModal(id){
   });
 });
 
+// Close active modal on Escape
+document.addEventListener('keydown',ev=>{
+  if(ev.key!=='Escape')return;
+  ['importExportModal','historyModal','notifModal','confirmModal'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el && el.classList.contains('active')) closeModal(id);
+  });
+});
+
 function copyExport(){
   const ta=document.getElementById('exportData');
-  ta.select();
-  document.execCommand('copy');
-  notify('📋 Copié !','Le code de sauvegarde est dans ton presse-papiers.');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(()=>{
+      notify('📋 Copié !','Le code de sauvegarde est dans ton presse-papiers.');
+    }).catch(()=>{
+      legacyCopy(ta);
+    });
+  }else{
+    legacyCopy(ta);
+  }
+}
+
+function legacyCopy(ta){
+  try{
+    ta.select();
+    document.execCommand('copy');
+    notify('📋 Copié !','Le code de sauvegarde est dans ton presse-papiers.');
+  }catch(e){
+    notify('⚠️ Erreur','Impossible de copier automatiquement — sélectionne et copie manuellement.');
+  }
 }
 
 function downloadExport(){
@@ -1626,7 +1740,7 @@ function doImport(){
     sessNum=state.sessNum||1;
     localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
     closeModal('importExportModal');
-    _lastLevel=getLevel(getXP(state)).lv; /* FIX: prevent false level-up on import */
+    _lastLevel=getLevel(getXP(state)).lv; /* prevent false level-up on import */
     applyTheme(state.theme||'dark');
     applySoundToggle();
     renderAll();
@@ -1719,7 +1833,7 @@ function renderAll(){
 // INIT
 // ══════════════════════════════════════════════════════
 
-_lastLevel=getLevel(getXP(state)).lv; /* FIX: set before first render */
+_lastLevel=getLevel(getXP(state)).lv; /* set before first render */
 applyTheme(state.theme||'dark');
 applySoundToggle();
 initStarfield();
